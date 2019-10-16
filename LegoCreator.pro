@@ -26,10 +26,10 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        View/mainwindow.cpp
+    View/MainWindow.cpp
 
 HEADERS += \
-        View/mainwindow.h
+    View/MainWindow.h
 
 FORMS += \
         View/mainwindow.ui
