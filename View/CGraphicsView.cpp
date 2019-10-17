@@ -31,7 +31,7 @@ void CGraphicsView::mouseMoveEvent(QMouseEvent *event)
         QPointF newPoint = mapToScene(event->pos());
         QPointF translation = newPoint - currentPoint;
 
-//        translate(translation.x(), translation.y());
+        translate(translation.x(), translation.y());
 
         startPoint->setX(event->x());
         startPoint->setY(event->y());
