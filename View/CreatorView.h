@@ -5,18 +5,23 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QPointF>
+#include <QScrollBar>
+#include <QtMath>
 
 #include <QDebug>
 
-class CGraphicsView : public QGraphicsView
+class CreatorView : public QGraphicsView
 {
     Q_OBJECT
 
 public:
-    CGraphicsView(QWidget* parent = nullptr);
+    CreatorView(QWidget* parent = nullptr);
 
 private:
-    QPointF* startPoint = new QPointF();
+    QPoint* startPoint = new QPoint();
+    const double SCALE_FACTOR = 1.2;
+    const double MAX_ZOOM = qPow(SCALE_FACTOR, 10);
+    const double MIN_ZOOM = qPow(SCALE_FACTOR, -12);
 
 protected:
     virtual void wheelEvent(QWheelEvent *event);

@@ -16,6 +16,7 @@ TEMPLATE = app
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+#QMAKE_CXXFLAGS += -Wreturn-type
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -25,15 +26,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    Model/CreatorMenuModel.cpp \
+    Model/CreatorRailModel.cpp \
+    Model/CreatorResourceModel.cpp \
+    Model/CreatorSvgModel.cpp \
+    View/CreatorScene.cpp \
+    View/CreatorView.cpp \
+    ViewModel/CreatorProvider.cpp \
+    ViewModel/CreatorViewModel.cpp \
         main.cpp \
-    View/MainWindow.cpp \
-    View/CGraphicsScene.cpp \
-    View/CGraphicsView.cpp
+    View/MainWindow.cpp
 
 HEADERS += \
+    Model/CreatorMenuModel.h \
+    Model/CreatorRailModel.h \
+    Model/CreatorResourceModel.h \
+    Model/CreatorSvgModel.h \
+    View/CreatorScene.h \
+    View/CreatorView.h \
     View/MainWindow.h \
-    View/CGraphicsView.h \
-    View/CGraphicsScene.h
+    ViewModel/CreatorProvider.h \
+    ViewModel/CreatorViewModel.h
 
 FORMS += \
         View/mainwindow.ui

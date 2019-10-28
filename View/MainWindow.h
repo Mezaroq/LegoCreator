@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <View/CGraphicsScene.h>
+#include <ui_mainwindow.h>
 
 namespace Ui {
 class MainWindow;
@@ -14,6 +14,9 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    CreatorView* getGraphicsView();
+    QListWidget* getListWidget();
+
     ~MainWindow();
 
 private:

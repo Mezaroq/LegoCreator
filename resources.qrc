@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/lc">
+        <file>resources/icons/curved_rail_icon.svg</file>
+        <file>resources/icons/double_flex_rail_icon.svg</file>
+        <file>resources/icons/flex_rail_icon.svg</file>
+        <file>resources/icons/left_switch_rail_icon.svg</file>
+        <file>resources/icons/right_switch_rail_icon.svg</file>
+        <file>resources/icons/straight_rail_icon.svg</file>
+        <file>resources/rails/double_flex_rail.svg</file>
+        <file>resources/rails/flex_rail.svg</file>
+        <file>resources/rails/straight_rail.svg</file>
+        <file>resources/rails/curved_rail.svg</file>
+        <file>resources/rails/left_switch_rail.svg</file>
+        <file>resources/rails/right_switch_rail.svg</file>
+    </qresource>
+    <qresource prefix="/"/>
+</RCC>
