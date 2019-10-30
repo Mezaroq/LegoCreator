@@ -7,11 +7,12 @@
 class CreatorRailModel : public CreatorResourceModel, public CreatorSvgModel
 {
 public:
-    CreatorRailModel(ResItemType railType, QPointF railPosition, double railAngle, double railRadius, QPoint railOffset = QPoint(0, 0));
-    virtual ResModelType getResModelType() override;
+    CreatorRailModel(ResourceType railType, QPointF railPosition, double railAngle, double railRadius, QPoint railOffset = QPoint(0, 0));
+    virtual ModelType getModelType() override;
+    void setZIndex();
 
 private:
-    ResItemType railType;
+    ResourceType railType;
     QPointF railPosition;
     double railAngle;
     QList<double> railRadius;

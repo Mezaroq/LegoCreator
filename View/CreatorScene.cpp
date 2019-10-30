@@ -14,8 +14,17 @@ void CreatorScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
 
     QGraphicsScene::mousePressEvent(mouseEvent);
-//    if (focusItem()) {
-//        qDebug() << focusItem();
+    if(mouseEvent->button() == Qt::LeftButton) {
+        CreatorSvgModel* newFocusObject = dynamic_cast<CreatorSvgModel*>(focusItem());
+        if (focusObject) {
+            emit focusObjectChanged(newFocusObject, focusObject);
+        } else {
+            emit focusObjectChanged(newFocusObject, nullptr);
+        }
+        focusObject = newFocusObject;
+    }
+    //    if (focusItem()) {
+    //        qDebug() << focusItem();
 
     //    if(mouseEvent->button() == Qt::LeftButton) {
     //            if (focusItem()) {

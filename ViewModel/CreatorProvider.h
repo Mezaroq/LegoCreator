@@ -16,13 +16,18 @@ class CreatorProvider : public QObject
     Q_OBJECT
 public:
     CreatorProvider();
-    virtual ~CreatorProvider();
-    void setMenuItems();
+    void createMenuItems();
+    void createConnections();
+    void createObjects();
+    void setObjectsData();
 
 private:
     MainWindow mainWindow;
-    CreatorScene *scene = new CreatorScene();
-    CreatorViewModel *viewModel = new CreatorViewModel();
+    QGraphicsView *view;
+    QListWidget *menu;
+    CreatorScene *scene;
+    CreatorViewModel *viewModel;
+
     QList<CreatorMenuModel *> menuItems;
 };
 

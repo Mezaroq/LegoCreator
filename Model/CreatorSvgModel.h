@@ -2,15 +2,16 @@
 #define CREATORSVGMODEL_H
 
 #include <QGraphicsSvgItem>
+#include <Model/CreatorResourceModel.h>
 
 class CreatorSvgModel : public QGraphicsSvgItem
 {
 public:
-    CreatorSvgModel(const QString &fileName, int modelType);
+    CreatorSvgModel(const QString &fileName, CreatorResourceModel::ModelType modelType);
     int getModelType();
 
 private:
-    int modelType;
+    CreatorResourceModel::ModelType modelType;
 };
 
 #endif // CREATORSVGMODEL_H

@@ -3,6 +3,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <Model/CreatorSvgModel.h>
 #include <QtSvg>
 
 #include <QDebug>
@@ -16,10 +17,16 @@ public:
     CreatorScene();
     QPointF getNextPos(QPointF currentPos, double radius, double angle);
 
+private:
+    CreatorSvgModel* focusObject = nullptr;
+
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     virtual void keyPressEvent(QKeyEvent *keyEvent);
+
+signals:
+    void focusObjectChanged(CreatorSvgModel* newObject, CreatorSvgModel* oldObject);
 };
 
 #endif // CGRAPHICSSCENE_H

@@ -6,13 +6,13 @@
 class CreatorResourceModel
 {
 public:
-    enum ResModelType{
+    enum ModelType{
         MODEL_RAIL,
         MODEL_STATION,
         MODEL_MENU
     };
 
-    enum ResItemType{
+    enum ResourceType{
         RAIL_FLEX,
         RAIL_DOUBLE_FLEX,
         RAIL_STRAIGHT,
@@ -26,8 +26,8 @@ public:
 
     CreatorResourceModel();
     virtual ~CreatorResourceModel();
-    QString getResource(ResModelType modelType, ResItemType itemType);
-    virtual ResModelType getResModelType() = 0;
+    QString getResource(ModelType modelType, ResourceType resourceType);
+    virtual ModelType getModelType() = 0;
 
 private:
     QList<QString> resourceItem;

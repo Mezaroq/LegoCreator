@@ -1,17 +1,17 @@
 #include "CreatorMenuModel.h"
 
-CreatorMenuModel::CreatorMenuModel(ResItemType itemType, const QString name) :
-    QListWidgetItem(QIcon(getResource(ResModelType::MODEL_MENU, itemType)), name)
+CreatorMenuModel::CreatorMenuModel(ResourceType menuType, const QString name) :
+    QListWidgetItem(QIcon(getResource(ModelType::MODEL_MENU, menuType)), name)
 {
-    this->itemType = itemType;
+    this->menuType = menuType;
 }
 
-CreatorResourceModel::ResModelType CreatorMenuModel::getResModelType()
+CreatorResourceModel::ModelType CreatorMenuModel::getModelType()
 {
-    return ResModelType::MODEL_MENU;
+    return ModelType::MODEL_MENU;
 }
 
-CreatorResourceModel::ResItemType CreatorMenuModel::getResItemType()
+CreatorResourceModel::ResourceType CreatorMenuModel::getResourceType()
 {
-    return itemType;
+    return menuType;
 }

@@ -7,12 +7,12 @@
 class CreatorMenuModel : public CreatorResourceModel, public QListWidgetItem
 {
 public:
-    CreatorMenuModel(ResItemType itemType, const QString name);
-    virtual ResModelType getResModelType() override;
-    ResItemType getResItemType();
+    CreatorMenuModel(ResourceType menuType, const QString name);
+    virtual ModelType getModelType() override;
+    ResourceType getResourceType();
 
 private:
-    ResItemType itemType;
+    ResourceType menuType;
 };
 
 #endif // CREATORMENUMODEL_H
