@@ -1,8 +1,7 @@
-#ifndef MAINPROVIDER_H
-#define MAINPROVIDER_H
+#ifndef CREATORPROVIDER_H
+#define CREATORPROVIDER_H
 
-#include <Model/CreatorMenuModel.h>
-#include <Model/CreatorRailModel.h>
+#include <Model/CreatorMenu.h>
 #include <View/CreatorScene.h>
 #include <View/MainWindow.h>
 #include <ViewModel/CreatorViewModel.h>
@@ -27,8 +26,15 @@ private:
     QListWidget *menu;
     CreatorScene *scene;
     CreatorViewModel *viewModel;
-
-    QList<CreatorMenuModel *> menuItems;
+    QList<CreatorMenu *> menuItems;
+    QAction *actionOpen_project;
+    QAction *actionSave_project;
+    QAction *actionExport_as_image;
+    QAction *actionRotate_object;
+    QAction *actionRotate_toggle;
+    QAction *actionChange_connection;
+    QAction *actionRemove_object;
+    QAction *actionRemove_all;
 };
 
-#endif // MAINPROVIDER_H
+#endif // CREATORPROVIDER_H

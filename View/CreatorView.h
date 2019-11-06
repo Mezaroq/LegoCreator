@@ -4,7 +4,6 @@
 #include <QGraphicsView>
 #include <QWheelEvent>
 #include <QMouseEvent>
-#include <QPointF>
 #include <QScrollBar>
 #include <QtMath>
 
@@ -20,8 +19,9 @@ public:
 private:
     QPoint* startPoint = new QPoint();
     const double SCALE_FACTOR = 1.2;
-    const double MAX_ZOOM = qPow(SCALE_FACTOR, 10);
+    const double MAX_ZOOM = qPow(SCALE_FACTOR, 6);
     const double MIN_ZOOM = qPow(SCALE_FACTOR, -12);
+    double currentZoom = 1;
 
 protected:
     virtual void wheelEvent(QWheelEvent *event);

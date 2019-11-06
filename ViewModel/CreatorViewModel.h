@@ -1,10 +1,13 @@
-#ifndef MAINVIEWMODEL_H
-#define MAINVIEWMODEL_H
+#ifndef CREATORVIEWMODEL_H
+#define CREATORVIEWMODEL_H
 
-#include <Model/CreatorMenuModel.h>
-#include <Model/CreatorRailModel.h>
+#include <Model/CreatorObject.h>
+#include <Model/CreatorMenu.h>
+#include <Model/CreatorRail.h>
 #include <View/CreatorScene.h>
+#include <QGraphicsEffect>
 #include <QObject>
+#include <QHash>
 #include <QList>
 #include <QDebug>
 
@@ -15,17 +18,27 @@ class CreatorViewModel : public QObject
 public:
     CreatorViewModel(CreatorScene *scene);
     virtual ~CreatorViewModel();
-    void createRail(CreatorResourceModel::ResourceType railType);
+    void createRail(CreatorRail::RailType railType);
 
 private:
-    int currentModelId = 0;
+    int objectId = 0;
     CreatorScene *scene;
-    CreatorRailModel *focusRail = nullptr;
-    QList<CreatorResourceModel*> modelItems;
+    CreatorObject *focusObject = nullptr;
+    QList<CreatorObject*> objectsList;
+
 
 public slots:
     void menuItemClicked(QListWidgetItem *item);
-    void focusObjectChanged(CreatorSvgModel *newObject, CreatorSvgModel *oldObject);
+    void focusObjectChanged(CreatorObject *newFocusObject);
+    void objectCreated(CreatorObject *newObject);
+    void openProjectTriggered();
+    void saveProjectTriggered();
+    void exportAsImageTriggered();
+    void rotateObjectTriggered();
+    void rotateToggleTriggered();
+    void changeConnectionTriggered();
+    void removeObjectTriggered();
+    void removeAllTriggered();
 };
 
-#endif // MAINVIEWMODEL_H
+#endif // CREATORVIEWMODEL_H

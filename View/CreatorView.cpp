@@ -34,6 +34,5 @@ void CreatorView::mouseMoveEvent(QMouseEvent *event)
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - startPoint->y()));
         startPoint->setX(event->x());
         startPoint->setY(event->y());
-        scene()->update();
     }
 }

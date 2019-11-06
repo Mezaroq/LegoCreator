@@ -26,10 +26,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-    Model/CreatorMenuModel.cpp \
-    Model/CreatorRailModel.cpp \
-    Model/CreatorResourceModel.cpp \
-    Model/CreatorSvgModel.cpp \
+    Model/CreatorMenu.cpp \
+    Model/CreatorObject.cpp \
+    Model/CreatorRail.cpp \
     View/CreatorScene.cpp \
     View/CreatorView.cpp \
     ViewModel/CreatorProvider.cpp \
@@ -38,10 +37,9 @@ SOURCES += \
     View/MainWindow.cpp
 
 HEADERS += \
-    Model/CreatorMenuModel.h \
-    Model/CreatorRailModel.h \
-    Model/CreatorResourceModel.h \
-    Model/CreatorSvgModel.h \
+    Model/CreatorMenu.h \
+    Model/CreatorObject.h \
+    Model/CreatorRail.h \
     View/CreatorScene.h \
     View/CreatorView.h \
     View/MainWindow.h \
