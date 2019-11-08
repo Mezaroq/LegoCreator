@@ -57,7 +57,7 @@ public:
     static QString      getResource(RailType railType);
     static qint8        getRailPointKey(RailToggle railToggle, RailPoint railPoint);
     RailType            getRailType();
-    QPointF             getNextPoint(CreatorRail *focusRail = nullptr);
+    QPointF             getNextPoint();
     qreal               getNextAngle();
     QPointF             getTogglePoint();
     void                setRailPosition();

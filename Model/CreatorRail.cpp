@@ -45,72 +45,79 @@ CreatorRail::RailType CreatorRail::getRailType()
     return railType;
 }
 
-QPointF CreatorRail::getNextPoint(CreatorRail *focusRail)
+QPointF CreatorRail::getNextPoint()
 {
     qreal radianAngle;
     qreal positionX = 0.0;
     qreal positionY = 0.0;
 
-    switch (railPoint) {
-    case CreatorRail::POINT_NORMAL:
-    case CreatorRail::POINT_SWITCH:
-        radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.value( ((railToggle * TOGGLE_SIZE) + railPoint) ));
-        positionX = railPosition.x() + (railPointRadius.value( ((railToggle * TOGGLE_SIZE) + railPoint) ) * qCos(radianAngle));
-        positionY = railPosition.y() + (railPointRadius.value( ((railToggle * TOGGLE_SIZE) + railPoint) ) * qSin(radianAngle));
-        return QPointF(positionX, positionY);
-    case CreatorRail::POINT_REVERSE:
-        // TUTAJ FUNKCJA BARDZIEJ ROZBUDOWANA BO MUSI BRAC POD UWAGE PROMIEN POPRZEDNIEGO ODCINKA I SWOJ KAT MINUS OFFSETY POPRZEDNIEGO ODCINKA
-        return QPointF(positionX, positionY);
-    }
+    radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.value( getRailPointKey(railToggle, railPoint) ));
+    positionX = railPosition.x() + (railPointRadius.value( getRailPointKey(railToggle, railPoint) ) * qCos(radianAngle));
+    positionY = railPosition.y() + (railPointRadius.value( getRailPointKey(railToggle, railPoint) ) * qSin(radianAngle));
+    return QPointF(positionX, positionY);
+
+    //    switch (railPoint) {
+    //    case CreatorRail::POINT_NORMAL:
+    //    case CreatorRail::POINT_SWITCH:
+    //        radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.value( getRailPointKey(railToggle, railPoint) ));
+    //        positionX = railPosition.x() + (railPointRadius.value( getRailPointKey(railToggle, railPoint) ) * qCos(radianAngle));
+    //        positionY = railPosition.y() + (railPointRadius.value( getRailPointKey(railToggle, railPoint) ) * qSin(radianAngle));
+    //        return QPointF(positionX, positionY);
+    //    case CreatorRail::POINT_REVERSE: //pojdzie do wywalenia bo będzie przekazywany jako parametr prosto z VM
+    //        radianAngle = qDegreesToRadians(railAngle + 90);
+    //        positionX = railPosition.x() + (80 * qCos(radianAngle));
+    //        positionY = railPosition.y() + (80 * qSin(radianAngle));
+    //        return QPointF(positionX, positionY);
+    //    }
 
 
 
-//    switch (railPoint) {
-//    case CreatorRail::POINT_NORMAL:
-//        switch (railToggle) {
-//        case CreatorRail::TOGGLE_NORMAL:
-//            radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.at(POINT_NORMAL));
-//            positionX = railPosition.x() + (railPointRadius.at(POINT_NORMAL) * qCos(radianAngle));
-//            positionY = railPosition.y() + (railPointRadius.at(POINT_NORMAL) * qSin(radianAngle));
-//            return QPointF(positionX, positionY);
-//        case CreatorRail::TOGGLE_REVERSE:
-//            switch (railType) {
-//            case CreatorRail::RAIL_FLEX:
-//            case CreatorRail::RAIL_DOUBLE_FLEX:
-//            case CreatorRail::RAIL_STRAIGHT:
-//                break;
-//            case CreatorRail::RAIL_CURVED:
-//            case CreatorRail::RAIL_LEFT_SWITCH:
-//            case CreatorRail::RAIL_RIGHT_SWITCH:
-//                radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.at(POINT_REVERSE));
-//                positionX = railPosition.x() + (railPointRadius.at(POINT_REVERSE) * qCos(radianAngle));
-//                positionY = railPosition.y() + (railPointRadius.at(POINT_REVERSE) * qSin(radianAngle));
-//                return QPointF(positionX, positionY);
-//            }
-//            break;
-//        case CreatorRail::TOGGLE_SWITCH:
-//            switch (railType) {
-//            case CreatorRail::RAIL_FLEX:
-//            case CreatorRail::RAIL_DOUBLE_FLEX:
-//            case CreatorRail::RAIL_STRAIGHT:
-//            case CreatorRail::RAIL_CURVED:
-//                break;
-//            case CreatorRail::RAIL_LEFT_SWITCH:
-//            case CreatorRail::RAIL_RIGHT_SWITCH:
-//                radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.at(POINT_SWITCH));
-//                positionX = railPosition.x() + (railPointRadius.at(POINT_SWITCH) * qCos(radianAngle));
-//                positionY = railPosition.y() + (railPointRadius.at(POINT_SWITCH) * qSin(radianAngle));
-//                return QPointF(positionX, positionY);
-//            }
-//            break;
+    //    switch (railPoint) {
+    //    case CreatorRail::POINT_NORMAL:
+    //        switch (railToggle) {
+    //        case CreatorRail::TOGGLE_NORMAL:
+    //            radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.at(POINT_NORMAL));
+    //            positionX = railPosition.x() + (railPointRadius.at(POINT_NORMAL) * qCos(radianAngle));
+    //            positionY = railPosition.y() + (railPointRadius.at(POINT_NORMAL) * qSin(radianAngle));
+    //            return QPointF(positionX, positionY);
+    //        case CreatorRail::TOGGLE_REVERSE:
+    //            switch (railType) {
+    //            case CreatorRail::RAIL_FLEX:
+    //            case CreatorRail::RAIL_DOUBLE_FLEX:
+    //            case CreatorRail::RAIL_STRAIGHT:
+    //                break;
+    //            case CreatorRail::RAIL_CURVED:
+    //            case CreatorRail::RAIL_LEFT_SWITCH:
+    //            case CreatorRail::RAIL_RIGHT_SWITCH:
+    //                radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.at(POINT_REVERSE));
+    //                positionX = railPosition.x() + (railPointRadius.at(POINT_REVERSE) * qCos(radianAngle));
+    //                positionY = railPosition.y() + (railPointRadius.at(POINT_REVERSE) * qSin(radianAngle));
+    //                return QPointF(positionX, positionY);
+    //            }
+    //            break;
+    //        case CreatorRail::TOGGLE_SWITCH:
+    //            switch (railType) {
+    //            case CreatorRail::RAIL_FLEX:
+    //            case CreatorRail::RAIL_DOUBLE_FLEX:
+    //            case CreatorRail::RAIL_STRAIGHT:
+    //            case CreatorRail::RAIL_CURVED:
+    //                break;
+    //            case CreatorRail::RAIL_LEFT_SWITCH:
+    //            case CreatorRail::RAIL_RIGHT_SWITCH:
+    //                radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.at(POINT_SWITCH));
+    //                positionX = railPosition.x() + (railPointRadius.at(POINT_SWITCH) * qCos(radianAngle));
+    //                positionY = railPosition.y() + (railPointRadius.at(POINT_SWITCH) * qSin(radianAngle));
+    //                return QPointF(positionX, positionY);
+    //            }
+    //            break;
 
-//        }
-//        break;
-//    case CreatorRail::POINT_REVERSE:
-//        break;
-//    case CreatorRail::POINT_SWITCH:
-//        break;
-//    }
+    //        }
+    //        break;
+    //    case CreatorRail::POINT_REVERSE:
+    //        break;
+    //    case CreatorRail::POINT_SWITCH:
+    //        break;
+    //    }
     //    switch (railToggle) {
     //    case CreatorRail::TOGGLE_NORMAL:
     //        radianAngle = qDegreesToRadians(railAngle + railPointAngleOffset.at(TOGGLE_NORMAL));
@@ -136,20 +143,84 @@ qreal CreatorRail::getNextAngle()
     case CreatorRail::RAIL_FLEX:
     case CreatorRail::RAIL_DOUBLE_FLEX:
     case CreatorRail::RAIL_STRAIGHT:
+        if (railPoint == POINT_REVERSE)
+            return railAngle + 180;
         return railAngle;
     case CreatorRail::RAIL_CURVED:
         switch (railToggle) {
         case CreatorRail::TOGGLE_NORMAL:
+            if (railPoint == POINT_REVERSE)
+                return railAngle + 180;
             return railAngle - 22.5;
         case CreatorRail::TOGGLE_REVERSE:
+            if (railPoint == POINT_REVERSE)
+                return railAngle + 180;
             return railAngle + 22.5;
         default:
             return railAngle;
         }
     case CreatorRail::RAIL_LEFT_SWITCH:
-        return railAngle;
+        switch (railToggle) {
+        case CreatorRail::TOGGLE_NORMAL:
+            switch (railPoint) {
+            case CreatorRail::POINT_NORMAL:
+                return railAngle;
+            case CreatorRail::POINT_REVERSE:
+                return railAngle + 180;
+            case CreatorRail::POINT_SWITCH:
+                return railAngle - 22.5;
+            }
+        case CreatorRail::TOGGLE_REVERSE:
+            switch (railPoint) {
+            case CreatorRail::POINT_NORMAL:
+                return railAngle;
+            case CreatorRail::POINT_REVERSE:
+                return railAngle + 180;
+            case CreatorRail::POINT_SWITCH:
+                return railAngle + 157.5;
+            }
+            break;
+        case CreatorRail::TOGGLE_SWITCH:
+            switch (railPoint) {
+            case CreatorRail::POINT_NORMAL:
+                return railAngle + 22.5;
+            case CreatorRail::POINT_REVERSE:
+                return railAngle + 180;
+            case CreatorRail::POINT_SWITCH:
+                return railAngle - 157.5;
+            }
+        }
     case CreatorRail::RAIL_RIGHT_SWITCH:
-        return railAngle;
+        switch (railToggle) {
+        case CreatorRail::TOGGLE_NORMAL:
+            switch (railPoint) {
+            case CreatorRail::POINT_NORMAL:
+                return railAngle;
+            case CreatorRail::POINT_REVERSE:
+                return railAngle + 180;
+            case CreatorRail::POINT_SWITCH:
+                return railAngle + 22.5;
+            }
+        case CreatorRail::TOGGLE_REVERSE:
+            switch (railPoint) {
+            case CreatorRail::POINT_NORMAL:
+                return railAngle;
+            case CreatorRail::POINT_REVERSE:
+                return railAngle + 180;
+            case CreatorRail::POINT_SWITCH:
+                return railAngle - 157.5;
+            }
+            break;
+        case CreatorRail::TOGGLE_SWITCH:
+            switch (railPoint) {
+            case CreatorRail::POINT_NORMAL:
+                return railAngle - 22.5;
+            case CreatorRail::POINT_REVERSE:
+                return railAngle + 180;
+            case CreatorRail::POINT_SWITCH:
+                return railAngle + 157.5;
+            }
+        }
     }
 }
 
