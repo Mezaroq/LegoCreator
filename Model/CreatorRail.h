@@ -9,8 +9,6 @@
 class CreatorRail : public CreatorObject
 {
 public:
-    static const int TOGGLE_SIZE = 3;
-
     enum RailType{
         RAIL_FLEX,
         RAIL_DOUBLE_FLEX,
@@ -57,18 +55,28 @@ public:
     static QString      getResource(RailType railType);
     static qint8        getRailPointKey(RailToggle railToggle, RailPoint railPoint);
     RailType            getRailType();
-    QPointF             getNextPoint();
-    qreal               getNextAngle();
-    QPointF             getTogglePoint();
+    QPointF             getNextRailPosition();
+    qreal               getNextRailAngle();
+    QPointF             getToggleRailSwitch();
+    QPointF             getToggleRailPoint();
+    RailToggle          getRailToggle();
+    CreatorRail*        getConnectedRail();
+    QList<CreatorRail*> getConnectedRails();
+    void                setConnectedRail(CreatorRail *connectedRail);
     void                setRailPosition();
     void                setRailAngle();
     void                setRailIndex();
+    void                setRailRotate(bool rotate);
+    void                setRailToggle(bool toggle);
+    void                removeConnectedRail(CreatorRail *connectedRail);
+    void                toggleRailAngle();
+    void                toggleRailSwitch();
+    void                toggleRailPoint();
     void                prepareRail();
-    void                rotateRail();
-    void                rotateToggle();
-    void                changeRailPoint();
 
 private:
+    static const int    TOGGLE_SIZE = 3;
+    QList<CreatorRail*> connectedRails;
     RailType            railType;
     QPointF             railPosition;
     qreal               railAngle;

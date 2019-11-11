@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("Lego Creator");
     ui->listWidget->setIconSize(QSize(100, 100));
 }
 

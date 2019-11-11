@@ -9,6 +9,8 @@
 #include <QObject>
 #include <QHash>
 #include <QList>
+
+#include <QDialog>
 #include <QDebug>
 
 class CreatorViewModel : public QObject
@@ -16,16 +18,25 @@ class CreatorViewModel : public QObject
     Q_OBJECT
 
 public:
+    enum UpdateReason{
+        FOCUS_GET,
+        FOCUS_LOST,
+        POSITION_CHANGED
+    };
+
     CreatorViewModel(CreatorScene *scene);
     virtual ~CreatorViewModel();
+    bool sceneHasObject(CreatorObject::ObjectType type);
     void createRail(CreatorRail::RailType railType);
+    void removeRail();
+    void update(UpdateReason reason, CreatorObject *object = nullptr);
 
 private:
     int objectId = 0;
     CreatorScene *scene;
     CreatorObject *focusObject = nullptr;
     QList<CreatorObject*> objectsList;
-
+    QGraphicsSvgItem *toggleRailNextPoint;
 
 public slots:
     void menuItemClicked(QListWidgetItem *item);

@@ -14,7 +14,6 @@ class CreatorScene : public QGraphicsScene
 
 public:
     CreatorScene();
-    QPointF getNextPos(QPointF currentPos, double radius, double angle);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) override;

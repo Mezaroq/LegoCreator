@@ -20,5 +20,6 @@
         <file>resources/icons/icon_bar_export.svg</file>
         <file>resources/icons/icon_bar_switch_connection.svg</file>
         <file>resources/icons/icon_bar_rotate_toggle.svg</file>
+        <file>resources/objects/object_rail_point.svg</file>
     </qresource>
 </RCC>

@@ -37,7 +37,7 @@ QString CreatorRail::getResource(CreatorRail::RailType railType)
 
 qint8 CreatorRail::getRailPointKey(CreatorRail::RailToggle railToggle, CreatorRail::RailPoint railPoint)
 {
-    return (railToggle * CreatorRail::TOGGLE_SIZE) + railPoint;
+    return (railToggle * TOGGLE_SIZE) + railPoint;
 }
 
 CreatorRail::RailType CreatorRail::getRailType()
@@ -45,7 +45,7 @@ CreatorRail::RailType CreatorRail::getRailType()
     return railType;
 }
 
-QPointF CreatorRail::getNextPoint()
+QPointF CreatorRail::getNextRailPosition()
 {
     qreal radianAngle;
     qreal positionX = 0.0;
@@ -57,7 +57,7 @@ QPointF CreatorRail::getNextPoint()
     return QPointF(positionX, positionY);
 }
 
-qreal CreatorRail::getNextAngle()
+qreal CreatorRail::getNextRailAngle()
 {
     switch (railType) {
     case CreatorRail::RAIL_FLEX:
@@ -144,7 +144,7 @@ qreal CreatorRail::getNextAngle()
     }
 }
 
-QPointF CreatorRail::getTogglePoint()
+QPointF CreatorRail::getToggleRailSwitch()
 {
     switch (railToggle) {
     case CreatorRail::TOGGLE_NORMAL:
@@ -158,6 +158,19 @@ QPointF CreatorRail::getTogglePoint()
     }
 }
 
+QPointF CreatorRail::getToggleRailPoint()
+{
+    QPointF pointPosition = getNextRailPosition();
+    qreal pointAngle = getNextRailAngle();
+    QPointF pointOffset = QPointF(-8, -8);
+
+    qreal radianAngle = qDegreesToRadians(pointAngle + 90);
+    qreal positionX = pointPosition.x() + (40.0 * qCos(radianAngle));
+    qreal positionY = pointPosition.y() + (40.0 * qSin(radianAngle));
+
+    return QPointF(positionX, positionY) + pointOffset;
+}
+
 void CreatorRail::prepareRail()
 {
     setRailPosition();
@@ -166,13 +179,35 @@ void CreatorRail::prepareRail()
     setTransformOriginPoint(railTransformOffset);
 }
 
-void CreatorRail::rotateRail()
+CreatorRail::RailToggle CreatorRail::getRailToggle()
+{
+    return railToggle;
+}
+
+CreatorRail *CreatorRail::getConnectedRail()
+{
+    if (!connectedRails.isEmpty())
+        return connectedRails.first();
+    return nullptr;
+}
+
+QList<CreatorRail *> CreatorRail::getConnectedRails()
+{
+    return connectedRails;
+}
+
+void CreatorRail::setConnectedRail(CreatorRail *connectedRail)
+{
+    connectedRails.append(connectedRail);
+}
+
+void CreatorRail::toggleRailAngle()
 {
     if (railIsRotate)
         setRotation(railAngle-=22.5);
 }
 
-void CreatorRail::rotateToggle()
+void CreatorRail::toggleRailSwitch()
 {
     switch (railType) {
     case CreatorRail::RAIL_FLEX:
@@ -204,7 +239,7 @@ void CreatorRail::rotateToggle()
     setRailPosition();
 }
 
-void CreatorRail::changeRailPoint()
+void CreatorRail::toggleRailPoint()
 {
     switch (railType) {
     case CreatorRail::RAIL_FLEX:
@@ -231,12 +266,11 @@ void CreatorRail::changeRailPoint()
         }
         break;
     }
-    qDebug() << railPoint;
 }
 
 void CreatorRail::setRailPosition()
 {
-    setPos(getTogglePoint());
+    setPos(getToggleRailSwitch());
 }
 
 void CreatorRail::setRailAngle()
@@ -294,4 +328,19 @@ void CreatorRail::setRailIndex()
         setZValue(10);
         break;
     }
+}
+
+void CreatorRail::setRailRotate(bool rotate)
+{
+    railIsRotate = rotate;
+}
+
+void CreatorRail::setRailToggle(bool toggle)
+{
+    railIsToggle = toggle;
+}
+
+void CreatorRail::removeConnectedRail(CreatorRail *connectedRail)
+{
+    connectedRails.removeOne(connectedRail);
 }

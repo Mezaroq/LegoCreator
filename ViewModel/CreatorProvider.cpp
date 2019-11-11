@@ -71,5 +71,4 @@ void CreatorProvider::setObjectsData()
         scene->addLine(QLineF(plate, MIN_GRID_POSITION, plate, MAX_GRID_POSITION), QPen(Qt::gray, GRID_LINE_SIZE));
         scene->addLine(QLineF(MIN_GRID_POSITION, plate, MAX_GRID_POSITION, plate), QPen(Qt::gray, GRID_LINE_SIZE));
     }
-//    scene->setBackgroundBrush(QBrush(QColor(235, 235, 235)));
 }
