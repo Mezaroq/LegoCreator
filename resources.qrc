@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/creator">
+        <file>resources/icons/icon_bar_delete.svg</file>
+        <file>resources/icons/icon_bar_delete_all.svg</file>
+        <file>resources/icons/icon_bar_open_file.svg</file>
+        <file>resources/icons/icon_bar_rotate.svg</file>
+        <file>resources/icons/icon_bar_save_file.svg</file>
+        <file>resources/icons/icon_menu_rail_curved.svg</file>
+        <file>resources/icons/icon_menu_rail_double_flex.svg</file>
+        <file>resources/icons/icon_menu_rail_flex.svg</file>
+        <file>resources/icons/icon_menu_rail_left_switch.svg</file>
+        <file>resources/icons/icon_menu_rail_right_switch.svg</file>
+        <file>resources/icons/icon_menu_rail_straight.svg</file>
+        <file>resources/objects/object_rail_curved.svg</file>
+        <file>resources/objects/object_rail_double_flex.svg</file>
+        <file>resources/objects/object_rail_flex.svg</file>
+        <file>resources/objects/object_rail_left_switch.svg</file>
+        <file>resources/objects/object_rail_right_switch.svg</file>
+        <file>resources/objects/object_rail_straight.svg</file>
+        <file>resources/icons/icon_bar_export.svg</file>
+        <file>resources/icons/icon_bar_switch_connection.svg</file>
+        <file>resources/icons/icon_bar_rotate_toggle.svg</file>
+        <file>resources/objects/object_rail_point.svg</file>
+    </qresource>
+</RCC>

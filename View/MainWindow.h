@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <View/CGraphicsScene.h>
+#include <ui_mainwindow.h>
 
 namespace Ui {
 class MainWindow;
@@ -14,8 +14,18 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    CreatorView* getGraphicsView();
+    QListWidget* getListWidget();
+    QAction *getActionOpenProject();
+    QAction *getActionSaveProject();
+    QAction *getActionExportAsImage();
+    QAction *getActionRotateObject();
+    QAction *getActionRotateToggle();
+    QAction *getActionChangeConnection();
+    QAction *getActionRemoveObject();
+    QAction *getActionRemoveAll();
 
+    ~MainWindow();
 private:
     Ui::MainWindow *ui;
 };
