@@ -11,6 +11,12 @@ void CreatorScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 }
 
+void CreatorScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseMoveEvent(event);
+//    QPoint point = event->scenePos().toPoint();
+}
+
 void CreatorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     QGraphicsScene::mouseReleaseEvent(mouseEvent);

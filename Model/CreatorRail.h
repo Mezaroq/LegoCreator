@@ -30,16 +30,15 @@ public:
 
     /*!
      * \brief CreatorRail
-     * \param railType                  typ toru const
-     * \param railPosition              pozycjaStartowa const
-     * \param railAngle                 kąt toru zależny od poprzedniego odcinka
-     * \param railPointRadius           promienie użyte do obliczania railPosition dla następnego odcinka w zależności do którego RailToggle zostanie wybrane
-     * \param railPointAngleOffset      offset dodawany do railAngle w celu obliczenia następnej pozycji
-     * \param railRotateRadius          promienie używane tylko do obracania odcinków w zależności od RailRotate
-     * \param railRotateAngleOffset     offset dodawany do railAngle w celu obliczenia pozycji dla obrotu toru
-     * \param railPositionOffset        offset dla każdej pozycji w przypadku gdy SVG nie zaczyna się w lewym górnym rogu
-     * \param railIsRotate              czy torem można zmieniać pozycje w jakiej jest ułożony
-     * \param railTransformOffset       offset dla każdej pozycji w przypadku gdy SVG nie zaczyna się w lewym górnym rogu, używany do rotacji
+     * \param railType
+     * \param railPosition              pozycja startowa
+     * \param railAngle                 kąt toru
+     * \param railPointRadius           promienie do obliczania punktow dla kolejnych odcinkow wzgledem obecnego
+     * \param railPointAngleOffset      offsety kata dla kolejnych odcinkow wzgledem obecnego
+     * \param railToggleRadius          promienie do obliczania punktów zmiany orientacji
+     * \param railToggleAngleOffset     offsety do obliczania punktow zmiany orientacji
+     * \param railPositionOffset        offset pozycji np. zakret posiada offset bo boundingRect zaczyna sie nie w miejscu gdzie railPosition
+     * \param railTransformOffset       offset dla transformacji qt (dla rotacji)
      */
     CreatorRail(RailType railType,
                 QPointF railPosition,
@@ -48,8 +47,6 @@ public:
                 QHash<qint8, qreal> railPointAngleOffset,
                 QHash<qint8, qreal> railToggleRadius,
                 QHash<qint8, qreal> railToggleAngleOffset,
-                bool railIsToggle = false,
-                bool railIsRotate = false,
                 QPoint railPositionOffset = QPoint(0, 0),
                 QPoint railTransformOffset = QPoint(0, 0));
     static QString      getResource(RailType railType);
@@ -88,8 +85,6 @@ private:
     QPoint              railTransformOffset;
     RailToggle          railToggle = TOGGLE_NORMAL;
     RailPoint           railPoint = POINT_NORMAL;
-    bool                railIsRotate;
-    bool                railIsToggle;
 };
 
 #endif // CREATORRAIL_H

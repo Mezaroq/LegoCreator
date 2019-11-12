@@ -1,6 +1,6 @@
 #include "CreatorRail.h"
 
-CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, qreal railAngle, QHash<qint8, qreal> railPointRadius, QHash<qint8, qreal> railPointAngleOffset, QHash<qint8, qreal> railToggleRadius, QHash<qint8, qreal> railToggleAngleOffset, bool railIsToggle, bool railIsRotate, QPoint railPositionOffset, QPoint railTransformOffset) :
+CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, qreal railAngle, QHash<qint8, qreal> railPointRadius, QHash<qint8, qreal> railPointAngleOffset, QHash<qint8, qreal> railToggleRadius, QHash<qint8, qreal> railToggleAngleOffset, QPoint railPositionOffset, QPoint railTransformOffset) :
     CreatorObject(CreatorRail::getResource(railType), CreatorObject::OBJECT_RAIL)
 {
     this->railType = railType;
@@ -12,8 +12,6 @@ CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, q
     this->railToggleAngleOffset = railToggleAngleOffset;
     this->railPositionOffset = railPositionOffset;
     this->railTransformOffset = railTransformOffset;
-    this->railIsRotate = railIsRotate;
-    this->railIsToggle = railIsToggle;
     prepareRail();
 }
 
@@ -203,40 +201,42 @@ void CreatorRail::setConnectedRail(CreatorRail *connectedRail)
 
 void CreatorRail::toggleRailAngle()
 {
-    if (railIsRotate)
+    if (connectedRails.isEmpty())
         setRotation(railAngle-=22.5);
 }
 
 void CreatorRail::toggleRailSwitch()
 {
-    switch (railType) {
-    case CreatorRail::RAIL_FLEX:
-    case CreatorRail::RAIL_DOUBLE_FLEX:
-    case CreatorRail::RAIL_STRAIGHT:
-        break;
-    case CreatorRail::RAIL_CURVED:
-        if (railToggle == TOGGLE_NORMAL)
-            railToggle = TOGGLE_REVERSE;
-        else
-            railToggle = TOGGLE_NORMAL;
-        break;
-    case CreatorRail::RAIL_LEFT_SWITCH:
-    case CreatorRail::RAIL_RIGHT_SWITCH:
-        switch (railToggle) {
-        case CreatorRail::TOGGLE_NORMAL:
-            railToggle = TOGGLE_REVERSE;
+    if (connectedRails.size() < 2) {
+        switch (railType) {
+        case CreatorRail::RAIL_FLEX:
+        case CreatorRail::RAIL_DOUBLE_FLEX:
+        case CreatorRail::RAIL_STRAIGHT:
             break;
-        case CreatorRail::TOGGLE_REVERSE:
-            railToggle = TOGGLE_SWITCH;
+        case CreatorRail::RAIL_CURVED:
+            if (railToggle == TOGGLE_NORMAL)
+                railToggle = TOGGLE_REVERSE;
+            else
+                railToggle = TOGGLE_NORMAL;
             break;
-        case CreatorRail::TOGGLE_SWITCH:
-            railToggle = TOGGLE_NORMAL;
+        case CreatorRail::RAIL_LEFT_SWITCH:
+        case CreatorRail::RAIL_RIGHT_SWITCH:
+            switch (railToggle) {
+            case CreatorRail::TOGGLE_NORMAL:
+                railToggle = TOGGLE_REVERSE;
+                break;
+            case CreatorRail::TOGGLE_REVERSE:
+                railToggle = TOGGLE_SWITCH;
+                break;
+            case CreatorRail::TOGGLE_SWITCH:
+                railToggle = TOGGLE_NORMAL;
+                break;
+            }
             break;
         }
-        break;
+        setRailAngle();
+        setRailPosition();
     }
-    setRailAngle();
-    setRailPosition();
 }
 
 void CreatorRail::toggleRailPoint()
@@ -328,16 +328,6 @@ void CreatorRail::setRailIndex()
         setZValue(10);
         break;
     }
-}
-
-void CreatorRail::setRailRotate(bool rotate)
-{
-    railIsRotate = rotate;
-}
-
-void CreatorRail::setRailToggle(bool toggle)
-{
-    railIsToggle = toggle;
 }
 
 void CreatorRail::removeConnectedRail(CreatorRail *connectedRail)

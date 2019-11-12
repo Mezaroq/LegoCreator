@@ -6,7 +6,7 @@ CreatorViewModel::CreatorViewModel(CreatorScene *scene)
     toggleRailNextPoint = new QGraphicsSvgItem(":/creator/resources/objects/object_rail_point.svg");
     toggleRailNextPoint->setZValue(10000);
     scene->addItem(toggleRailNextPoint);
-    toggleRailNextPoint->setVisible(false);
+    toggleRailNextPoint->hide();
 }
 
 CreatorViewModel::~CreatorViewModel() {}
@@ -45,7 +45,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 90);
         railToggleRadius.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, false, true);
+        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
 
         if (focusRail) {
             focusRail->setConnectedRail(newRail);
@@ -60,7 +60,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 90);
         railToggleRadius.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, false, true);
+        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
 
         if (focusRail) {
             focusRail->setConnectedRail(newRail);
@@ -75,7 +75,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 90);
         railToggleRadius.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, false, true);
+        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
 
         if (focusRail) {
             focusRail->setConnectedRail(newRail);
@@ -96,7 +96,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railToggleRadius.insert(CreatorRail::TOGGLE_REVERSE, 174.69);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_REVERSE, 37.94);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, true, true, QPoint(0, -28), QPoint(0, 28));
+        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, QPoint(0, -28), QPoint(0, 28));
 
         if (toggle == CreatorRail::TOGGLE_REVERSE)
             newRail->toggleRailSwitch();
@@ -131,7 +131,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_REVERSE, 14.04);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_SWITCH, 13.76);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, true, true, QPoint(0, -127), QPoint(0, 127));
+        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, QPoint(0, -127), QPoint(0, 127));
 
         if (focusRail) {
             focusRail->setConnectedRail(newRail);
@@ -140,19 +140,19 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         objectCreated(newRail);
         break;
     case CreatorRail::RAIL_RIGHT_SWITCH:
-        railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 320); //
+        railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 320);
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 80);
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_SWITCH), 367.02);
-        railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_NORMAL), 320); //
+        railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_NORMAL), 320);
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_REVERSE), 80);
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_SWITCH), 57.11);
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_SWITCH, CreatorRail::POINT_NORMAL), 336.32);
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_SWITCH, CreatorRail::POINT_REVERSE), 80);
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_SWITCH, CreatorRail::POINT_SWITCH), 206.68);
-        railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 0); //
+        railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 0);
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 90);
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_SWITCH), 21.18);
-        railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_NORMAL), 0); //
+        railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_NORMAL), 0);
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_REVERSE), 90);
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_REVERSE, CreatorRail::POINT_SWITCH), -112.91);
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_SWITCH, CreatorRail::POINT_NORMAL), -0.4);
@@ -164,7 +164,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_REVERSE, 14.04);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_SWITCH, 11.03);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, true, true);
+        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
 
         if (focusRail) {
             focusRail->setConnectedRail(newRail);
@@ -186,13 +186,6 @@ void CreatorViewModel::removeRail()
     objectsList.removeOne(focusRail);
     delete focusRail;
     focusObjectChanged(newFocusRail);
-
-//    if (focusObject) {
-//        objectsList.removeOne(focusObject);
-//        delete focusObject;
-//        focusObject = nullptr;
-//        update(FOCUS_LOST);
-//    }
 }
 
 void CreatorViewModel::update(CreatorViewModel::UpdateReason reason, CreatorObject *object)
@@ -206,14 +199,14 @@ void CreatorViewModel::update(CreatorViewModel::UpdateReason reason, CreatorObje
         case CreatorObject::OBJECT_RAIL:
             rail = static_cast<CreatorRail*>(object);
             toggleRailNextPoint->setPos(rail->getToggleRailPoint());
-            toggleRailNextPoint->setVisible(true);
+            toggleRailNextPoint->show();
             break;
         case CreatorObject::OBJECT_STATION:
             break;
         }
         break;
     case CreatorViewModel::FOCUS_LOST:
-        toggleRailNextPoint->setVisible(false);
+        toggleRailNextPoint->hide();
         break;
     case CreatorViewModel::POSITION_CHANGED:
         switch (object->getObjectType()) {

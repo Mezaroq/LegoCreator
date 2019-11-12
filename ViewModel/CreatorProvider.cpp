@@ -66,6 +66,8 @@ void CreatorProvider::setObjectsData()
     const int MIN_GRID_POSITION = -(PLATE_SIZE * AMOUNT_OF_PLATES);
     const int MAX_GRID_POSITION = PLATE_SIZE * AMOUNT_OF_PLATES;
     qreal GRID_LINE_SIZE = 0.25;
+    QGraphicsRectItem *item = scene->addRect(MIN_GRID_POSITION, MIN_GRID_POSITION, MAX_GRID_POSITION*2, MAX_GRID_POSITION*2);
+    item->setBrush(QColor(252, 252, 252));
 
     for (int plate = MIN_GRID_POSITION; plate <= MAX_GRID_POSITION; plate+=PLATE_SIZE) {
         scene->addLine(QLineF(plate, MIN_GRID_POSITION, plate, MAX_GRID_POSITION), QPen(Qt::gray, GRID_LINE_SIZE));
