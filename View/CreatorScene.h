@@ -5,7 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
-
+#include <QtMath>
 #include <QDebug>
 
 class CreatorScene : public QGraphicsScene

@@ -23,6 +23,7 @@ public:
         TOGGLE_SWITCH
     };
     enum RailPoint{
+        POINT_NONE,
         POINT_NORMAL,
         POINT_REVERSE,
         POINT_SWITCH
@@ -57,9 +58,10 @@ public:
     QPointF             getToggleRailSwitch();
     QPointF             getToggleRailPoint();
     RailToggle          getRailToggle();
+    RailPoint           getRailPoint();
     CreatorRail*        getConnectedRail();
-    QList<CreatorRail*> getConnectedRails();
-    void                setConnectedRail(CreatorRail *connectedRail);
+    QHash<RailPoint, CreatorRail*> getConnectedRails();
+    void                setConnectedRail(RailPoint railPoint, CreatorRail *connectedRail);
     void                setRailPosition();
     void                setRailAngle();
     void                setRailIndex();
@@ -73,7 +75,8 @@ public:
 
 private:
     static const int    TOGGLE_SIZE = 3;
-    QList<CreatorRail*> connectedRails;
+//    QList<CreatorRail*> connectedRails;
+    QHash<RailPoint, CreatorRail*> connectedRails;
     RailType            railType;
     QPointF             railPosition;
     qreal               railAngle;

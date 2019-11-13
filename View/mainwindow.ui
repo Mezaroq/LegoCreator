@@ -81,25 +81,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>868</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionOpen_project"/>
-    <addaction name="actionSave_project"/>
-    <addaction name="actionExport_as_image"/>
-   </widget>
-   <addaction name="menuFile"/>
-  </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="movable">
     <bool>false</bool>
@@ -121,13 +102,18 @@
    </attribute>
    <addaction name="actionOpen_project"/>
    <addaction name="actionSave_project"/>
+   <addaction name="actionExport_as_image"/>
    <addaction name="separator"/>
    <addaction name="actionRotate_object"/>
-   <addaction name="actionRotate_toggle"/>
-   <addaction name="actionChange_connection"/>
+   <addaction name="actionToggle_object"/>
+   <addaction name="actionSwitch_point"/>
    <addaction name="separator"/>
    <addaction name="actionRemove_object"/>
-   <addaction name="actionRemove_all"/>
+   <addaction name="actionRemove_all_objects"/>
+   <addaction name="separator"/>
+   <addaction name="actionGrid_settings"/>
+   <addaction name="actionToggle_grid"/>
+   <addaction name="actionFullscreen_mode"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen_project">
@@ -169,28 +155,28 @@
     <string>Rotate object</string>
    </property>
   </action>
-  <action name="actionRotate_toggle">
+  <action name="actionToggle_object">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/creator/resources/icons/icon_bar_rotate_toggle.svg</normaloff>:/creator/resources/icons/icon_bar_rotate_toggle.svg</iconset>
    </property>
    <property name="text">
-    <string>Rotate toggle</string>
+    <string>Toggle object</string>
    </property>
    <property name="toolTip">
-    <string>Rotate toggle</string>
+    <string>Toggle object</string>
    </property>
   </action>
-  <action name="actionChange_connection">
+  <action name="actionSwitch_point">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/creator/resources/icons/icon_bar_switch_connection.svg</normaloff>:/creator/resources/icons/icon_bar_switch_connection.svg</iconset>
    </property>
    <property name="text">
-    <string>Change connection</string>
+    <string>Switch point</string>
    </property>
    <property name="toolTip">
-    <string>Change connection</string>
+    <string>Switch point</string>
    </property>
   </action>
   <action name="actionRemove_object">
@@ -205,16 +191,58 @@
     <string>Remove object</string>
    </property>
   </action>
-  <action name="actionRemove_all">
+  <action name="actionRemove_all_objects">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/creator/resources/icons/icon_bar_delete_all.svg</normaloff>:/creator/resources/icons/icon_bar_delete_all.svg</iconset>
    </property>
    <property name="text">
-    <string>Remove all</string>
+    <string>Remove all objects</string>
    </property>
    <property name="toolTip">
-    <string>Remove all</string>
+    <string>Remove all objects</string>
+   </property>
+  </action>
+  <action name="actionGrid_settings">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_grid_settings.svg</normaloff>:/creator/resources/icons/icon_bar_grid_settings.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Grid settings</string>
+   </property>
+   <property name="toolTip">
+    <string>Grid settings</string>
+   </property>
+  </action>
+  <action name="actionToggle_grid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_grid_show.svg</normaloff>:/creator/resources/icons/icon_bar_grid_show.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Toggle grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle grid</string>
+   </property>
+  </action>
+  <action name="actionFullscreen_mode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_fullscreen_on.svg</normaloff>:/creator/resources/icons/icon_bar_fullscreen_on.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Fullscreen mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Fullscreen mode</string>
    </property>
   </action>
  </widget>

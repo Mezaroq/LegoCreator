@@ -14,7 +14,7 @@ void CreatorScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void CreatorScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
-//    QPoint point = event->scenePos().toPoint();
+//    qDebug() << QPoint((qFloor(event->scenePos().x() / 10) * 10), (qFloor(event->scenePos().y() / 10) * 10));
 }
 
 void CreatorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)

@@ -21,5 +21,10 @@
         <file>resources/icons/icon_bar_switch_connection.svg</file>
         <file>resources/icons/icon_bar_rotate_toggle.svg</file>
         <file>resources/objects/object_rail_point.svg</file>
+        <file>resources/icons/icon_bar_fullscreen_off.svg</file>
+        <file>resources/icons/icon_bar_fullscreen_on.svg</file>
+        <file>resources/icons/icon_bar_grid_hide.svg</file>
+        <file>resources/icons/icon_bar_grid_settings.svg</file>
+        <file>resources/icons/icon_bar_grid_show.svg</file>
     </qresource>
 </RCC>
