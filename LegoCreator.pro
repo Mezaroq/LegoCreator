@@ -29,6 +29,7 @@ SOURCES += \
     Model/CreatorMenu.cpp \
     Model/CreatorObject.cpp \
     Model/CreatorRail.cpp \
+    View/CreatorGridSettings.cpp \
     View/CreatorScene.cpp \
     View/CreatorView.cpp \
     ViewModel/CreatorProvider.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     Model/CreatorMenu.h \
     Model/CreatorObject.h \
     Model/CreatorRail.h \
+    View/CreatorGridSettings.h \
     View/CreatorScene.h \
     View/CreatorView.h \
     View/MainWindow.h \
@@ -47,6 +49,7 @@ HEADERS += \
     ViewModel/CreatorViewModel.h
 
 FORMS += \
+        View/creatorgridsettings.ui \
         View/mainwindow.ui
 
 # Default rules for deployment.

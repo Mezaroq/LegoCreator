@@ -3,8 +3,6 @@
 
 #include <QGraphicsSvgItem>
 
-#include <QDebug>
-
 class CreatorObject : public QGraphicsSvgItem
 {
 public:

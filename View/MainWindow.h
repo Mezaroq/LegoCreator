@@ -11,21 +11,26 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     CreatorView* getGraphicsView();
     QListWidget* getListWidget();
-    QAction *getActionOpenProject();
-    QAction *getActionSaveProject();
-    QAction *getActionExportAsImage();
-    QAction *getActionRotateObject();
-    QAction *getActionRotateToggle();
-    QAction *getActionChangeConnection();
-    QAction *getActionRemoveObject();
-    QAction *getActionRemoveAll();
+    QAction* getActionOpenProject();
+    QAction* getActionSaveProject();
+    QAction* getActionExportAsImage();
+    QAction* getActionRotateObject();
+    QAction* getActionToggleObject();
+    QAction* getActionSwitchPoint();
+    QAction* getActionRemoveObject();
+    QAction* getActionRemoveAllObjects();
+    QAction* getActionGridSettings();
+    QAction* getActionToggleGrid();
 
     ~MainWindow();
+private slots:
+    void on_actionFullscreen_mode_toggled(bool arg1);
+    void on_actionToggle_grid_toggled(bool arg1);
+
 private:
     Ui::MainWindow *ui;
 };

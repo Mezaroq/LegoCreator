@@ -39,14 +39,14 @@ QAction *MainWindow::getActionRotateObject()
     return ui->actionRotate_object;
 }
 
-QAction *MainWindow::getActionRotateToggle()
+QAction *MainWindow::getActionToggleObject()
 {
-    return ui->actionRotate_toggle;
+    return ui->actionToggle_object;
 }
 
-QAction *MainWindow::getActionChangeConnection()
+QAction *MainWindow::getActionSwitchPoint()
 {
-    return ui->actionChange_connection;
+    return ui->actionSwitch_point;
 }
 
 QAction *MainWindow::getActionRemoveObject()
@@ -54,12 +54,41 @@ QAction *MainWindow::getActionRemoveObject()
     return ui->actionRemove_object;
 }
 
-QAction *MainWindow::getActionRemoveAll()
+QAction *MainWindow::getActionRemoveAllObjects()
 {
-    return ui->actionRemove_all;
+    return ui->actionRemove_all_objects;
+}
+
+QAction *MainWindow::getActionGridSettings()
+{
+    return ui->actionGrid_settings;
+}
+
+QAction *MainWindow::getActionToggleGrid()
+{
+    return ui->actionToggle_grid;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_actionFullscreen_mode_toggled(bool arg1)
+{
+    if (arg1) {
+        showFullScreen();
+        ui->actionFullscreen_mode->setIcon(QIcon(":/creator/resources/icons/icon_bar_fullscreen_on.svg"));
+    } else{
+        showMaximized();
+        ui->actionFullscreen_mode->setIcon(QIcon(":/creator/resources/icons/icon_bar_fullscreen_off.svg"));
+    }
+}
+
+void MainWindow::on_actionToggle_grid_toggled(bool arg1)
+{
+    if (arg1)
+        ui->actionToggle_grid->setIcon(QIcon(":/creator/resources/icons/icon_bar_grid_hide.svg"));
+    else
+        ui->actionToggle_grid->setIcon(QIcon(":/creator/resources/icons/icon_bar_grid_show.svg"));
 }

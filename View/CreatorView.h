@@ -12,7 +12,6 @@
 class CreatorView : public QGraphicsView
 {
     Q_OBJECT
-
 public:
     CreatorView(QWidget* parent = nullptr);
 

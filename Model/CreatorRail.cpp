@@ -1,6 +1,12 @@
 #include "CreatorRail.h"
 
-CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, qreal railAngle, QHash<qint8, qreal> railPointRadius, QHash<qint8, qreal> railPointAngleOffset, QHash<qint8, qreal> railToggleRadius, QHash<qint8, qreal> railToggleAngleOffset, QPoint railPositionOffset, QPoint railTransformOffset) :
+CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, qreal railAngle,
+                         QHash<qint8, qreal> railPointRadius,
+                         QHash<qint8, qreal> railPointAngleOffset,
+                         QHash<qint8, qreal> railToggleRadius,
+                         QHash<qint8, qreal> railToggleAngleOffset,
+                         QPoint railPositionOffset,
+                         QPoint railTransformOffset) :
     CreatorObject(CreatorRail::getResource(railType), CreatorObject::OBJECT_RAIL)
 {
     this->railType = railType;
@@ -81,6 +87,8 @@ qreal CreatorRail::getNextRailAngle()
         switch (railToggle) {
         case CreatorRail::TOGGLE_NORMAL:
             switch (railPoint) {
+            case CreatorRail::POINT_NONE:
+                return -1;
             case CreatorRail::POINT_NORMAL:
                 return railAngle;
             case CreatorRail::POINT_REVERSE:
@@ -90,6 +98,8 @@ qreal CreatorRail::getNextRailAngle()
             }
         case CreatorRail::TOGGLE_REVERSE:
             switch (railPoint) {
+            case CreatorRail::POINT_NONE:
+                return -1;
             case CreatorRail::POINT_NORMAL:
                 return railAngle;
             case CreatorRail::POINT_REVERSE:
@@ -100,6 +110,8 @@ qreal CreatorRail::getNextRailAngle()
             break;
         case CreatorRail::TOGGLE_SWITCH:
             switch (railPoint) {
+            case CreatorRail::POINT_NONE:
+                return -1;
             case CreatorRail::POINT_NORMAL:
                 return railAngle + 22.5;
             case CreatorRail::POINT_REVERSE:
@@ -112,6 +124,8 @@ qreal CreatorRail::getNextRailAngle()
         switch (railToggle) {
         case CreatorRail::TOGGLE_NORMAL:
             switch (railPoint) {
+            case CreatorRail::POINT_NONE:
+                return -1;
             case CreatorRail::POINT_NORMAL:
                 return railAngle;
             case CreatorRail::POINT_REVERSE:
@@ -121,6 +135,8 @@ qreal CreatorRail::getNextRailAngle()
             }
         case CreatorRail::TOGGLE_REVERSE:
             switch (railPoint) {
+            case CreatorRail::POINT_NONE:
+                return -1;
             case CreatorRail::POINT_NORMAL:
                 return railAngle;
             case CreatorRail::POINT_REVERSE:
@@ -131,6 +147,8 @@ qreal CreatorRail::getNextRailAngle()
             break;
         case CreatorRail::TOGGLE_SWITCH:
             switch (railPoint) {
+            case CreatorRail::POINT_NONE:
+                return -1;
             case CreatorRail::POINT_NORMAL:
                 return railAngle - 22.5;
             case CreatorRail::POINT_REVERSE:
@@ -158,15 +176,18 @@ QPointF CreatorRail::getToggleRailSwitch()
 
 QPointF CreatorRail::getToggleRailPoint()
 {
-    QPointF pointPosition = getNextRailPosition();
-    qreal pointAngle = getNextRailAngle();
-    QPointF pointOffset = QPointF(-8, -8);
+    if (railPoint != POINT_NONE) {
+        QPointF pointPosition = getNextRailPosition();
+        qreal pointAngle = getNextRailAngle();
+        QPointF pointOffset = QPointF(-8, -8);
 
-    qreal radianAngle = qDegreesToRadians(pointAngle + 90);
-    qreal positionX = pointPosition.x() + (40.0 * qCos(radianAngle));
-    qreal positionY = pointPosition.y() + (40.0 * qSin(radianAngle));
+        qreal radianAngle = qDegreesToRadians(pointAngle + 90);
+        qreal positionX = pointPosition.x() + (40.0 * qCos(radianAngle));
+        qreal positionY = pointPosition.y() + (40.0 * qSin(radianAngle));
 
-    return QPointF(positionX, positionY) + pointOffset;
+        return QPointF(positionX, positionY) + pointOffset;
+    }
+    return QPoint();
 }
 
 void CreatorRail::prepareRail()
@@ -182,21 +203,26 @@ CreatorRail::RailToggle CreatorRail::getRailToggle()
     return railToggle;
 }
 
+CreatorRail::RailPoint CreatorRail::getRailPoint()
+{
+    return railPoint;
+}
+
 CreatorRail *CreatorRail::getConnectedRail()
 {
     if (!connectedRails.isEmpty())
-        return connectedRails.first();
+        return connectedRails.value(connectedRails.keys().front());
     return nullptr;
 }
 
-QList<CreatorRail *> CreatorRail::getConnectedRails()
+QHash<CreatorRail::RailPoint, CreatorRail *> CreatorRail::getConnectedRails()
 {
     return connectedRails;
 }
 
-void CreatorRail::setConnectedRail(CreatorRail *connectedRail)
+void CreatorRail::setConnectedRail(RailPoint railPoint, CreatorRail *connectedRail)
 {
-    connectedRails.append(connectedRail);
+    connectedRails.insert(railPoint, connectedRail);
 }
 
 void CreatorRail::toggleRailAngle()
@@ -246,22 +272,63 @@ void CreatorRail::toggleRailPoint()
     case CreatorRail::RAIL_DOUBLE_FLEX:
     case CreatorRail::RAIL_STRAIGHT:
     case CreatorRail::RAIL_CURVED:
-        if (railPoint == POINT_NORMAL)
-            railPoint = POINT_REVERSE;
-        else
-            railPoint = POINT_NORMAL;
+        switch (railPoint) {
+        case CreatorRail::POINT_NONE:
+            if (!connectedRails.contains(POINT_NORMAL))
+                railPoint = POINT_NORMAL;
+            else if (!connectedRails.contains(POINT_REVERSE))
+                railPoint = POINT_REVERSE;
+            break;
+        case CreatorRail::POINT_NORMAL:
+            if (!connectedRails.contains(POINT_REVERSE))
+                railPoint = POINT_REVERSE;
+            else if (connectedRails.contains(POINT_NORMAL))
+                railPoint = POINT_NONE;
+            break;
+        case CreatorRail::POINT_REVERSE:
+            if (!connectedRails.contains(POINT_NORMAL))
+                railPoint = POINT_NORMAL;
+            else if (connectedRails.contains(POINT_REVERSE))
+                railPoint = POINT_NONE;
+            break;
+        case CreatorRail::POINT_SWITCH:
+            break;
+        }
         break;
     case CreatorRail::RAIL_LEFT_SWITCH:
     case CreatorRail::RAIL_RIGHT_SWITCH:
         switch (railPoint) {
+        case CreatorRail::POINT_NONE:
+            if (!connectedRails.contains(POINT_NORMAL))
+                railPoint = POINT_NORMAL;
+            else if (!connectedRails.contains(POINT_REVERSE))
+                railPoint = POINT_REVERSE;
+            else if (!connectedRails.contains(POINT_SWITCH))
+                railPoint = POINT_SWITCH;
+            break;
         case CreatorRail::POINT_NORMAL:
-            railPoint = POINT_REVERSE;
+            if (!connectedRails.contains(POINT_REVERSE))
+                railPoint = POINT_REVERSE;
+            else if (!connectedRails.contains(POINT_SWITCH))
+                railPoint = POINT_SWITCH;
+            else if (connectedRails.contains(POINT_NORMAL))
+                railPoint = POINT_NONE;
             break;
         case CreatorRail::POINT_REVERSE:
-            railPoint = POINT_SWITCH;
+            if (!connectedRails.contains(POINT_SWITCH))
+                railPoint = POINT_SWITCH;
+            else if (!connectedRails.contains(POINT_NORMAL))
+                railPoint = POINT_NORMAL;
+            else if (connectedRails.contains(POINT_REVERSE))
+                railPoint = POINT_NONE;
             break;
         case CreatorRail::POINT_SWITCH:
-            railPoint = POINT_NORMAL;
+            if (!connectedRails.contains(POINT_NORMAL))
+                railPoint = POINT_NORMAL;
+            else if (!connectedRails.contains(POINT_REVERSE))
+                railPoint = POINT_REVERSE;
+            else if (connectedRails.contains(POINT_SWITCH))
+                railPoint = POINT_NONE;
             break;
         }
         break;
@@ -332,5 +399,5 @@ void CreatorRail::setRailIndex()
 
 void CreatorRail::removeConnectedRail(CreatorRail *connectedRail)
 {
-    connectedRails.removeOne(connectedRail);
+    connectedRails.remove(connectedRails.key(connectedRail));
 }

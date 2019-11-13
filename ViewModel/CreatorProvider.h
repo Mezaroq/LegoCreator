@@ -4,11 +4,10 @@
 #include <Model/CreatorMenu.h>
 #include <View/CreatorScene.h>
 #include <View/MainWindow.h>
+#include <View/CreatorView.h>
 #include <ViewModel/CreatorViewModel.h>
 #include <QObject>
 #include <QList>
-
-#include <QDebug>
 
 class CreatorProvider : public QObject
 {
@@ -22,7 +21,7 @@ public:
 
 private:
     MainWindow mainWindow;
-    QGraphicsView *view;
+    CreatorView *view;
     QListWidget *menu;
     CreatorScene *scene;
     CreatorViewModel *viewModel;
@@ -31,10 +30,12 @@ private:
     QAction *actionSave_project;
     QAction *actionExport_as_image;
     QAction *actionRotate_object;
-    QAction *actionRotate_toggle;
-    QAction *actionChange_connection;
+    QAction *actionToggle_object;
+    QAction *actionSwitch_point;
     QAction *actionRemove_object;
-    QAction *actionRemove_all;
+    QAction *actionRemove_all_objects;
+    QAction *actionGrid_settings;
+    QAction *actionToggle_grid;
 };
 
 #endif // CREATORPROVIDER_H
