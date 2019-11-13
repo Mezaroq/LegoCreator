@@ -1,8 +1,9 @@
 #include "CreatorViewModel.h"
 
-CreatorViewModel::CreatorViewModel(CreatorScene *scene)
+CreatorViewModel::CreatorViewModel(CreatorScene *scene, MainWindow *window)
 {
     this->scene = scene;
+    this->window = window;
 
     removeAllConfirm.setText("Remove all objects?");
     removeAllConfirm.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
@@ -13,6 +14,9 @@ CreatorViewModel::CreatorViewModel(CreatorScene *scene)
     toggleRailNextPoint->setZValue(10000);
     scene->addItem(toggleRailNextPoint);
     toggleRailNextPoint->hide();
+
+    gridSettings = new CreatorGridSettings();
+    connect(gridSettings, SIGNAL(gridSizeChanged(qint8, int)), this, SLOT(gridResized(qint8, int)));
 
     gridBorder = new QGraphicsRectItem();
     scene->addItem(gridBorder);
@@ -157,7 +161,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
     objectCreated(newRail);
 }
 
-void CreatorViewModel::removeRail() //do przerobienia bo trzeba sprawdzic czy da sie iterowac jak normalna liste aby od razu pozyskiwac wartosci: NAJWIDOCZNIEJ SIE DA OD TAK :D
+void CreatorViewModel::removeRail()
 {
     CreatorRail *focusRail = static_cast<CreatorRail*>(focusObject);
     for (CreatorRail* rail : focusRail->getConnectedRails()) {
@@ -173,8 +177,11 @@ void CreatorViewModel::removeRail() //do przerobienia bo trzeba sprawdzic czy da
     focusObjectChanged(newFocusRail);
 }
 
-void CreatorViewModel::drawGrid(qint8 studsPerPlate, qint16 gridSize, bool resize, qreal gridLineSize)
+void CreatorViewModel::drawGrid(qint8 studsPerPlate, int gridSize, bool resize, qreal gridLineSize)
 {
+    currentStuds = studsPerPlate;
+    currentGridSize = gridSize;
+
     if (resize) {
         for (QGraphicsLineItem *line : gridLines) {
             delete line;
@@ -312,7 +319,30 @@ void CreatorViewModel::saveProjectTriggered()
 
 void CreatorViewModel::exportAsImageTriggered()
 {
+    QString fileName= QFileDialog::getSaveFileName(window, "Save image", QCoreApplication::applicationDirPath(), "PNG (*.png);;JPEG (*.JPEG);;BMP Files (*.bmp)" );
+    if (!fileName.isNull())
+    {
+        focusObjectChanged(nullptr);
+        gridToggled(true);
+        for (QGraphicsLineItem *line : gridLines) {
+            delete line;
+        }
+        gridLines.clear();
+        scene->removeItem(gridBorder);
 
+        scene->setSceneRect(scene->itemsBoundingRect());
+        QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);
+        image.fill(Qt::transparent);
+
+        QPainter painter(&image);
+        scene->render(&painter);
+        image.save(fileName);
+        scene->setSceneRect(QRect());
+        window->getGraphicsView()->centerOn(scene->itemsBoundingRect().center());
+
+        scene->addItem(gridBorder);
+        gridResized(currentStuds, currentGridSize);
+    }
 }
 
 void CreatorViewModel::rotateObjectTriggered()
@@ -369,7 +399,7 @@ void CreatorViewModel::removeAllTriggered()
 
 void CreatorViewModel::gridSettingsTriggered()
 {
-    drawGrid(8, 10000, true);
+    gridSettings->show();
 }
 
 void CreatorViewModel::gridToggled(bool checked)
@@ -385,4 +415,9 @@ void CreatorViewModel::gridToggled(bool checked)
             gridBorder->show();
         }
     }
+}
+
+void CreatorViewModel::gridResized(qint8 studsPerPlate, int gridSize)
+{
+    drawGrid(studsPerPlate, gridSize, true);
 }

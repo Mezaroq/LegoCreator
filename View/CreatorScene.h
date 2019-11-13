@@ -11,7 +11,6 @@
 class CreatorScene : public QGraphicsScene
 {
     Q_OBJECT
-
 public:
     CreatorScene();
 

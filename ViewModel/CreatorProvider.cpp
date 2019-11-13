@@ -50,7 +50,7 @@ void CreatorProvider::createObjects()
     actionGrid_settings = mainWindow.getActionGridSettings();
     actionToggle_grid = mainWindow.getActionToggleGrid();
     scene = new CreatorScene();
-    viewModel = new CreatorViewModel(scene);
+    viewModel = new CreatorViewModel(scene, &mainWindow);
 }
 
 void CreatorProvider::setObjectsData()

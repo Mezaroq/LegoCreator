@@ -1,6 +1,12 @@
 #include "CreatorRail.h"
 
-CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, qreal railAngle, QHash<qint8, qreal> railPointRadius, QHash<qint8, qreal> railPointAngleOffset, QHash<qint8, qreal> railToggleRadius, QHash<qint8, qreal> railToggleAngleOffset, QPoint railPositionOffset, QPoint railTransformOffset) :
+CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, qreal railAngle,
+                         QHash<qint8, qreal> railPointRadius,
+                         QHash<qint8, qreal> railPointAngleOffset,
+                         QHash<qint8, qreal> railToggleRadius,
+                         QHash<qint8, qreal> railToggleAngleOffset,
+                         QPoint railPositionOffset,
+                         QPoint railTransformOffset) :
     CreatorObject(CreatorRail::getResource(railType), CreatorObject::OBJECT_RAIL)
 {
     this->railType = railType;
@@ -202,30 +208,30 @@ CreatorRail::RailPoint CreatorRail::getRailPoint()
     return railPoint;
 }
 
-CreatorRail *CreatorRail::getConnectedRail() //trzeba ogarnac jak zwracac pierwszy
+CreatorRail *CreatorRail::getConnectedRail()
 {
     if (!connectedRails.isEmpty())
         return connectedRails.value(connectedRails.keys().front());
     return nullptr;
 }
 
-QHash<CreatorRail::RailPoint, CreatorRail *> CreatorRail::getConnectedRails() //do przerobienia bez problemu
+QHash<CreatorRail::RailPoint, CreatorRail *> CreatorRail::getConnectedRails()
 {
     return connectedRails;
 }
 
-void CreatorRail::setConnectedRail(RailPoint railPoint, CreatorRail *connectedRail) //tutaj trzeba dodac argument RailPoint i zrobic insert zamiast append
+void CreatorRail::setConnectedRail(RailPoint railPoint, CreatorRail *connectedRail)
 {
     connectedRails.insert(railPoint, connectedRail);
 }
 
-void CreatorRail::toggleRailAngle() //bez problemu do przerobienia
+void CreatorRail::toggleRailAngle()
 {
     if (connectedRails.isEmpty())
         setRotation(railAngle-=22.5);
 }
 
-void CreatorRail::toggleRailSwitch() //bez problemu do przerobienia
+void CreatorRail::toggleRailSwitch()
 {
     if (connectedRails.size() < 2) {
         switch (railType) {
@@ -266,7 +272,6 @@ void CreatorRail::toggleRailPoint()
     case CreatorRail::RAIL_DOUBLE_FLEX:
     case CreatorRail::RAIL_STRAIGHT:
     case CreatorRail::RAIL_CURVED:
-        qDebug() << railPoint;
         switch (railPoint) {
         case CreatorRail::POINT_NONE:
             if (!connectedRails.contains(POINT_NORMAL))
@@ -392,7 +397,7 @@ void CreatorRail::setRailIndex()
     }
 }
 
-void CreatorRail::removeConnectedRail(CreatorRail *connectedRail) //trzeba ogarnac usuwanie po wartosci
+void CreatorRail::removeConnectedRail(CreatorRail *connectedRail)
 {
     connectedRails.remove(connectedRails.key(connectedRail));
 }

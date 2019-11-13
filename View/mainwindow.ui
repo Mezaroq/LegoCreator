@@ -236,7 +236,7 @@
    </property>
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/creator/resources/icons/icon_bar_fullscreen_on.svg</normaloff>:/creator/resources/icons/icon_bar_fullscreen_on.svg</iconset>
+     <normaloff>:/creator/resources/icons/icon_bar_fullscreen_off.svg</normaloff>:/creator/resources/icons/icon_bar_fullscreen_off.svg</iconset>
    </property>
    <property name="text">
     <string>Fullscreen mode</string>

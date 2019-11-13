@@ -24,7 +24,7 @@ void CreatorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void CreatorScene::keyPressEvent(QKeyEvent *keyEvent)
 {
-    qDebug() << keyEvent->modifiers() << keyEvent->key();
+//    qDebug() << keyEvent->modifiers() << keyEvent->key();
     if(focusItem()) {
         switch (keyEvent->key()) {
         case Qt::Key_Up:

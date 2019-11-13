@@ -75,7 +75,6 @@ public:
 
 private:
     static const int    TOGGLE_SIZE = 3;
-//    QList<CreatorRail*> connectedRails;
     QHash<RailPoint, CreatorRail*> connectedRails;
     RailType            railType;
     QPointF             railPosition;

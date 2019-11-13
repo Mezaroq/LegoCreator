@@ -4,11 +4,10 @@
 #include <Model/CreatorMenu.h>
 #include <View/CreatorScene.h>
 #include <View/MainWindow.h>
+#include <View/CreatorView.h>
 #include <ViewModel/CreatorViewModel.h>
 #include <QObject>
 #include <QList>
-
-#include <QDebug>
 
 class CreatorProvider : public QObject
 {
@@ -22,7 +21,7 @@ public:
 
 private:
     MainWindow mainWindow;
-    QGraphicsView *view;
+    CreatorView *view;
     QListWidget *menu;
     CreatorScene *scene;
     CreatorViewModel *viewModel;
