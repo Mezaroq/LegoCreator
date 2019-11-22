@@ -2,6 +2,8 @@
 #define CREATORGRIDSETTINGS_H
 
 #include <QDialog>
+#include <QComboBox>
+#include <QSpinBox>
 
 namespace Ui {
 class CreatorGridSettings;
@@ -11,19 +13,13 @@ class CreatorGridSettings : public QDialog
 {
     Q_OBJECT
 public:
-    enum PlateSize{
-        STUD_1,
-        STUD_2,
-        STUD_4,
-        STUD_8,
-        STUD_16,
-        STUD_32
-    };
     explicit CreatorGridSettings(QWidget *parent = nullptr);
     ~CreatorGridSettings();
+    QComboBox* getStudsPerPlateComboBox();
+    QSpinBox* getGridSizeSpinBox();
 
 signals:
-    void gridSizeChanged(qint8 plateSize, int gridSize);
+    void gridSizeChanged(int plateSize, int gridSize);
 
 private slots:
     void on_pushButton_clicked();

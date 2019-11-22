@@ -1,6 +1,8 @@
 #include <View/CreatorView.h>
 
-CreatorView::CreatorView(QWidget *parent) : QGraphicsView (parent){}
+CreatorView::CreatorView(QWidget *parent) : QGraphicsView (parent){
+    setMouseTracking(true);
+}
 
 void CreatorView::wheelEvent(QWheelEvent *event)
 {

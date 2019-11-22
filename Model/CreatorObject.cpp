@@ -9,3 +9,13 @@ CreatorObject::ObjectType CreatorObject::getObjectType() const
 {
     return objectType;
 }
+
+int CreatorObject::getObjectIndexValue(CreatorObject::ObjectType objectType)
+{
+    switch (objectType) {
+    case CreatorObject::OBJECT_RAIL:
+        return 1000;
+    case CreatorObject::OBJECT_STATION:
+        return 2000;
+    }
+}

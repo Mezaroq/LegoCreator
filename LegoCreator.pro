@@ -29,6 +29,7 @@ SOURCES += \
     Model/CreatorMenu.cpp \
     Model/CreatorObject.cpp \
     Model/CreatorRail.cpp \
+    Model/CreatorStation.cpp \
     View/CreatorGridSettings.cpp \
     View/CreatorScene.cpp \
     View/CreatorView.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     Model/CreatorMenu.h \
     Model/CreatorObject.h \
     Model/CreatorRail.h \
+    Model/CreatorStation.h \
     View/CreatorGridSettings.h \
     View/CreatorScene.h \
     View/CreatorView.h \

@@ -49,6 +49,16 @@ CreatorRail::RailType CreatorRail::getRailType()
     return railType;
 }
 
+QPointF CreatorRail::getRailPosition()
+{
+    return railPosition;
+}
+
+qreal CreatorRail::getRailAngle()
+{
+    return railAngle;
+}
+
 QPointF CreatorRail::getNextRailPosition()
 {
     qreal radianAngle;
@@ -385,14 +395,14 @@ void CreatorRail::setRailIndex()
     case CreatorRail::RAIL_FLEX:
     case CreatorRail::RAIL_DOUBLE_FLEX:
     case CreatorRail::RAIL_STRAIGHT:
-        setZValue(1000);
+        setZValue(getObjectIndexValue(CreatorObject::OBJECT_RAIL) + 30);
         break;
     case CreatorRail::RAIL_CURVED:
-        setZValue(100);
+        setZValue(getObjectIndexValue(CreatorObject::OBJECT_RAIL) + 20);
         break;
     case CreatorRail::RAIL_LEFT_SWITCH:
     case CreatorRail::RAIL_RIGHT_SWITCH:
-        setZValue(10);
+        setZValue(getObjectIndexValue(CreatorObject::OBJECT_RAIL) + 10);
         break;
     }
 }

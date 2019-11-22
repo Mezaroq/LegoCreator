@@ -69,6 +69,16 @@ QAction *MainWindow::getActionToggleGrid()
     return ui->actionToggle_grid;
 }
 
+QAction *MainWindow::getActionChangePointer()
+{
+    return ui->actionChange_pointer;
+}
+
+QAction *MainWindow::getActionPointerSettings()
+{
+    return ui->actionPointer_settings;
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;

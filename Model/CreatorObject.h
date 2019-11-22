@@ -12,6 +12,7 @@ public:
     };
     CreatorObject(const QString object, const ObjectType objectType);
     ObjectType getObjectType() const;
+    int getObjectIndexValue(ObjectType objectType);
 
 private:
     ObjectType objectType;

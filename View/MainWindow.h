@@ -25,6 +25,8 @@ public:
     QAction* getActionRemoveAllObjects();
     QAction* getActionGridSettings();
     QAction* getActionToggleGrid();
+    QAction* getActionChangePointer();
+    QAction* getActionPointerSettings();
 
     ~MainWindow();
 private slots:

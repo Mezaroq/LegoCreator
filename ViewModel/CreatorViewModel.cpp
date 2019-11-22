@@ -1,43 +1,65 @@
 #include "CreatorViewModel.h"
 
-CreatorViewModel::CreatorViewModel(CreatorScene *scene, MainWindow *window)
+#include <QInputDialog>
+
+CreatorViewModel::CreatorViewModel(CreatorScene *scene, MainWindow *mainWindow)
 {
     this->scene = scene;
-    this->window = window;
+    this->mainWindow = mainWindow;
+    viewModelSetup();
+}
 
+CreatorViewModel::~CreatorViewModel() {}
+
+int CreatorViewModel::getPlateSize(CreatorViewModel::PlateSize gridPlateSize)
+{
+    switch (gridPlateSize) {
+    case CreatorViewModel::STUD_1:
+        return 1;
+    case CreatorViewModel::STUD_2:
+        return 2;
+    case CreatorViewModel::STUD_4:
+        return 4;
+    case CreatorViewModel::STUD_8:
+        return 8;
+    case CreatorViewModel::STUD_16:
+        return 16;
+    case CreatorViewModel::STUD_32:
+        return 32;
+    }
+}
+
+void CreatorViewModel::viewModelSetup()
+{
     removeAllConfirm.setText("Remove all objects?");
     removeAllConfirm.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
     removeAllConfirm.setDefaultButton(QMessageBox::Cancel);
     removeAllConfirm.iconPixmap();
 
-    toggleRailNextPoint = new QGraphicsSvgItem(":/creator/resources/objects/object_rail_point.svg");
-    toggleRailNextPoint->setZValue(10000);
-    scene->addItem(toggleRailNextPoint);
-    toggleRailNextPoint->hide();
+    gridBorder = new QGraphicsRectItem();
+    gridBorder->setBrush(QColor(252, 252, 252));
+    scene->addItem(gridBorder);
+    drawGrid(currentStuds, currentGridSize);
 
     gridSettings = new CreatorGridSettings();
-    connect(gridSettings, SIGNAL(gridSizeChanged(qint8, int)), this, SLOT(gridResized(qint8, int)));
+    gridSettings->getGridSizeSpinBox()->setRange(0, 100000);
+    gridSettings->getGridSizeSpinBox()->setValue(currentGridSize);
+    gridSettings->getStudsPerPlateComboBox()->setCurrentIndex(STUD_4);
+    connect(gridSettings, SIGNAL(gridSizeChanged(int, int)), this, SLOT(gridResized(int, int)));
 
-    gridBorder = new QGraphicsRectItem();
-    scene->addItem(gridBorder);
-    drawGrid(4, 10000);
-}
-
-CreatorViewModel::~CreatorViewModel() {}
-
-bool CreatorViewModel::sceneHasObject(CreatorObject::ObjectType type)
-{
-    for (CreatorObject *object : objectsList) {
-        if (object->getObjectType() == type)
-            return true;
-    }
-    return false;
+    scene->setPointerState(positionPointerState);
+    positionPointer = new QGraphicsSvgItem(":/creator/resources/objects/object_rail_point.svg");
+    positionPointer->setZValue(POINTER_INDEX_VALUE);
+    positionPointer->hide();
+    positionPointer->setCacheMode(QGraphicsItem::ItemCoordinateCache);
+    positionPointer->setCachingEnabled(true);
+    scene->addItem(positionPointer);
 }
 
 void CreatorViewModel::createRail(CreatorRail::RailType railType)
 {   
     CreatorRail *newRail;
-    QPointF railPosition = QPointF(0, 0);
+    QPointF railPosition = positionPointer->pos() - POSITION_POINTER_OFFSET;
     qreal railAngle = 0.0;
     CreatorRail::RailToggle toggle = CreatorRail::TOGGLE_NORMAL;
     QHash<qint8, qreal> railPointRadius;
@@ -95,8 +117,12 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_REVERSE, 37.94);
         newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, QPoint(0, -28), QPoint(0, 28));
-        if (toggle == CreatorRail::TOGGLE_REVERSE)
+        if (toggle == CreatorRail::TOGGLE_REVERSE || lastRailToggle == CreatorRail::TOGGLE_REVERSE) {
             newRail->toggleRailSwitch();
+            lastRailToggle = CreatorRail::TOGGLE_REVERSE;
+        } else {
+            lastRailToggle = CreatorRail::TOGGLE_NORMAL;
+        }
         break;
     case CreatorRail::RAIL_LEFT_SWITCH:
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 320);
@@ -161,23 +187,26 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
     objectCreated(newRail);
 }
 
-void CreatorViewModel::removeRail()
+void CreatorViewModel::createStation(CreatorStation::StationType stationType)
 {
-    CreatorRail *focusRail = static_cast<CreatorRail*>(focusObject);
-    for (CreatorRail* rail : focusRail->getConnectedRails()) {
-        rail->removeConnectedRail(focusRail);
-        rail->toggleRailPoint();
+    CreatorStation *station;
+    QPointF stationPosition = positionPointer->pos() - POSITION_POINTER_OFFSET;
+    qreal stationAngle = 0.0;
+
+    switch (stationType) {
+    case CreatorStation::STATION_PASSENGER:
+        station = new CreatorStation(stationType, stationPosition, stationAngle, QPoint(0, -40), QPoint(0, 40));
+        break;
+    case CreatorStation::STATION_FREIGHT:
+        station = new CreatorStation(stationType, stationPosition, stationAngle, QPoint(-10, -10), QPoint(10, 10));
+        break;
+    case CreatorStation::STATION_SMALL:
+        break;
     }
-    CreatorRail *newFocusRail = focusRail->getConnectedRail();
-    focusObject = nullptr;
-    objectsList.removeOne(focusRail);
-    delete focusRail;
-    if (newFocusRail)
-        newFocusRail->toggleRailPoint();
-    focusObjectChanged(newFocusRail);
+    objectCreated(station);
 }
 
-void CreatorViewModel::drawGrid(qint8 studsPerPlate, int gridSize, bool resize, qreal gridLineSize)
+void CreatorViewModel::drawGrid(int studsPerPlate, int gridSize, bool resize, qreal gridLineSize)
 {
     currentStuds = studsPerPlate;
     currentGridSize = gridSize;
@@ -195,45 +224,63 @@ void CreatorViewModel::drawGrid(qint8 studsPerPlate, int gridSize, bool resize, 
     const int MAX_GRID_POSITION = PLATE_SIZE * AMOUNT_OF_PLATES;
 
     gridBorder->setRect(MIN_GRID_POSITION, MIN_GRID_POSITION, MAX_GRID_POSITION*2, MAX_GRID_POSITION*2);
-    gridBorder->setBrush(QColor(252, 252, 252));
-    gridBorder->show();
+    if (gridIsHidden)
+        gridBorder->hide();
 
     for (int plate_position = MIN_GRID_POSITION; plate_position <= MAX_GRID_POSITION; plate_position+=PLATE_SIZE) {
         gridLines.append(scene->addLine(QLineF(plate_position, MIN_GRID_POSITION, plate_position, MAX_GRID_POSITION), QPen(Qt::gray, gridLineSize)));
+        if (gridIsHidden)
+            gridLines.last()->hide();
         gridLines.append(scene->addLine(QLineF(MIN_GRID_POSITION, plate_position, MAX_GRID_POSITION, plate_position), QPen(Qt::gray, gridLineSize)));
+        if (gridIsHidden)
+            gridLines.last()->hide();
     }
 }
 
-void CreatorViewModel::update(CreatorViewModel::UpdateReason reason, CreatorObject *object)
+void CreatorViewModel::viewModelUpdate(CreatorViewModel::UpdateReason reason, CreatorObject *object)
 {
-    CreatorRail *rail;
-//    CreatorStation *station;
+    CreatorRail *rail = dynamic_cast<CreatorRail*>(object);
+    CreatorStation *station = dynamic_cast<CreatorStation*>(object);
 
     switch (reason) {
-    case CreatorViewModel::FOCUS_GET:
+    case CreatorViewModel::OBJECT_MOVED:
         switch (object->getObjectType()) {
         case CreatorObject::OBJECT_RAIL:
-            rail = static_cast<CreatorRail*>(object);
-            toggleRailNextPoint->setPos(rail->getToggleRailPoint());
-            if (rail->getToggleRailPoint().isNull())
-                toggleRailNextPoint->hide();
-            else
-                toggleRailNextPoint->show();
             break;
         case CreatorObject::OBJECT_STATION:
+            positionPointer->setPos(station->getStationPosition() + POSITION_POINTER_OFFSET);
             break;
         }
         break;
-    case CreatorViewModel::FOCUS_LOST:
-        toggleRailNextPoint->hide();
-        break;
-    case CreatorViewModel::POSITION_CHANGED:
+    case CreatorViewModel::OBJECT_GET_FOCUS:
         switch (object->getObjectType()) {
         case CreatorObject::OBJECT_RAIL:
-            rail = static_cast<CreatorRail*>(object);
-            toggleRailNextPoint->setPos(rail->getToggleRailPoint());
+            if (!rail->getToggleRailPoint().isNull()) {
+                positionPointer->setPos(rail->getToggleRailPoint());
+                positionPointer->show();
+            } else {
+                positionPointer->hide();
+            }
             break;
         case CreatorObject::OBJECT_STATION:
+            positionPointer->setPos(station->getStationPosition() + POSITION_POINTER_OFFSET);
+            positionPointer->show();
+            positionPointerState = CreatorScene::POINTER_DISABLED;
+            break;
+        }
+        break;
+    case CreatorViewModel::OBJECT_LOST_FOCUS:
+        positionPointer->hide();
+        positionPointerState = CreatorScene::POINTER_DISABLED;
+        break;
+    case CreatorViewModel::POINTER_CHANGED:
+        switch (object->getObjectType()) {
+        case CreatorObject::OBJECT_RAIL:
+            positionPointer->setPos(rail->getToggleRailPoint());
+            break;
+        case CreatorObject::OBJECT_STATION:
+            positionPointer->setPos(station->getStationPosition());
+            positionPointer->show();
             break;
         }
         break;
@@ -245,34 +292,40 @@ void CreatorViewModel::menuItemClicked(QListWidgetItem *item)
 {
     switch (static_cast<CreatorMenu*>(item)->getMenuType()) {
     case CreatorMenu::RAIL_FLEX:
-        if (!sceneHasObject(CreatorObject::OBJECT_RAIL) || focusObject)
+        if (positionPointerState == CreatorScene::POINTER_SET || dynamic_cast<CreatorRail*>(focusObject))
             createRail(CreatorRail::RAIL_FLEX);
         break;
     case CreatorMenu::RAIL_DOUBLE_FLEX:
-        if (!sceneHasObject(CreatorObject::OBJECT_RAIL) || focusObject)
+        if (positionPointerState == CreatorScene::POINTER_SET || dynamic_cast<CreatorRail*>(focusObject))
             createRail(CreatorRail::RAIL_DOUBLE_FLEX);
         break;
     case CreatorMenu::RAIL_STRAIGHT:
-        if (!sceneHasObject(CreatorObject::OBJECT_RAIL) || focusObject)
+        if (positionPointerState == CreatorScene::POINTER_SET || dynamic_cast<CreatorRail*>(focusObject))
             createRail(CreatorRail::RAIL_STRAIGHT);
         break;
     case CreatorMenu::RAIL_CURVED:
-        if (!sceneHasObject(CreatorObject::OBJECT_RAIL) || focusObject)
+        if (positionPointerState == CreatorScene::POINTER_SET || dynamic_cast<CreatorRail*>(focusObject))
             createRail(CreatorRail::RAIL_CURVED);
         break;
     case CreatorMenu::RAIL_LEFT_SWITCH:
-        if (!sceneHasObject(CreatorObject::OBJECT_RAIL) || focusObject)
+        if (positionPointerState == CreatorScene::POINTER_SET || dynamic_cast<CreatorRail*>(focusObject))
             createRail(CreatorRail::RAIL_LEFT_SWITCH);
         break;
     case CreatorMenu::RAIL_RIGHT_SWITCH:
-        if (!sceneHasObject(CreatorObject::OBJECT_RAIL) || focusObject)
+        if (positionPointerState == CreatorScene::POINTER_SET || dynamic_cast<CreatorRail*>(focusObject))
             createRail(CreatorRail::RAIL_RIGHT_SWITCH);
         break;
     case CreatorMenu::STATION_PASSENGER:
+        if (positionPointerState == CreatorScene::POINTER_SET)
+            createStation(CreatorStation::STATION_PASSENGER);
         break;
     case CreatorMenu::STATION_FREIGHT:
+        if (positionPointerState == CreatorScene::POINTER_SET)
+            createStation(CreatorStation::STATION_FREIGHT);
         break;
     case CreatorMenu::STATION_SMALL:
+        if (positionPointerState == CreatorScene::POINTER_SET)
+            createStation(CreatorStation::STATION_SMALL);
         break;
     }
 }
@@ -281,16 +334,17 @@ void CreatorViewModel::focusObjectChanged(CreatorObject *newFocusObject)
 {
     if (focusObject) {
         focusObject->graphicsEffect()->setEnabled(false);
-        update(FOCUS_LOST);
+        viewModelUpdate(OBJECT_LOST_FOCUS);
     }
 
     if (newFocusObject) {
         newFocusObject->graphicsEffect()->setEnabled(true);
-        update(FOCUS_GET, newFocusObject);
+        viewModelUpdate(OBJECT_GET_FOCUS, newFocusObject);
+    } else {
+        viewModelUpdate(OBJECT_LOST_FOCUS);
     }
     focusObject = newFocusObject;
-    if (!focusObject)
-        update(FOCUS_LOST);
+    scene->setFocusObject(newFocusObject);
 }
 
 void CreatorViewModel::objectCreated(CreatorObject *newObject)
@@ -307,6 +361,72 @@ void CreatorViewModel::objectCreated(CreatorObject *newObject)
     focusObjectChanged(newObject);
 }
 
+void CreatorViewModel::pointerChanged(bool isSet, bool positionChanged, QPointF position)
+{
+    if (focusObject)
+        focusObjectChanged(nullptr);
+    switch (positionPointerState) {
+    case CreatorScene::POINTER_DISABLED:
+    case CreatorScene::POINTER_SET:
+        positionPointerState = CreatorScene::POINTER_ENABLED;
+        scene->setPointerState(positionPointerState);
+        mainWindow->getActionChangePointer()->setIcon(QIcon(":/creator/resources/icons/icon_bar_pointer_enabled.svg"));
+        positionPointer->show();
+        positionPointer->setPos(QPoint(0, 0) + POSITION_POINTER_OFFSET);
+        break;
+    case CreatorScene::POINTER_ENABLED:
+        if (positionChanged) {
+            positionPointer->setPos(position + POSITION_POINTER_OFFSET);
+        } else if (isSet) {
+            positionPointerState = CreatorScene::POINTER_SET;
+            scene->setPointerState(positionPointerState);
+            mainWindow->getActionChangePointer()->setIcon(QIcon(":/creator/resources/icons/icon_bar_pointer_disabled.svg"));
+        } else {
+            positionPointerState = CreatorScene::POINTER_DISABLED;
+            scene->setPointerState(positionPointerState);
+            mainWindow->getActionChangePointer()->setIcon(QIcon(":/creator/resources/icons/icon_bar_pointer_disabled.svg"));
+            viewModelUpdate(OBJECT_LOST_FOCUS);
+        }
+        break;
+    }
+    scene->update();
+}
+
+void CreatorViewModel::pointerSettingsTriggered()
+{
+    bool settingsChanged;
+
+    QStringList settings;
+    settings.append("1 stud");
+    settings.append("2 studs");
+    settings.append("4 studs");
+    settings.append("8 studs");
+    settings.append("16 studs");
+    settings.append("32 studs");
+
+    QString item = QInputDialog::getItem(mainWindow, tr("Pointer settings"), tr("Studs:"), settings, 0, false, &settingsChanged, Qt::WindowType::WindowCloseButtonHint|Qt::MSWindowsFixedSizeDialogHint);
+
+    if (settingsChanged) {
+        scene->setPointerMoveVector(getPlateSize(PlateSize(settings.indexOf(item))));
+    }
+}
+
+void CreatorViewModel::focusObjectMoved(QPointF newPosition)
+{
+    switch (focusObject->getObjectType()) {
+    case CreatorObject::OBJECT_STATION:
+    {
+        CreatorStation *station = static_cast<CreatorStation*>(focusObject);
+        station->moveStation(newPosition);
+        viewModelUpdate(OBJECT_MOVED, station);
+        qDebug() << newPosition;
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void CreatorViewModel::openProjectTriggered()
 {
 
@@ -319,11 +439,10 @@ void CreatorViewModel::saveProjectTriggered()
 
 void CreatorViewModel::exportAsImageTriggered()
 {
-    QString fileName= QFileDialog::getSaveFileName(window, "Save image", QCoreApplication::applicationDirPath(), "PNG (*.png);;JPEG (*.JPEG);;BMP Files (*.bmp)" );
+    QString fileName= QFileDialog::getSaveFileName(mainWindow, "Save image", QCoreApplication::applicationDirPath(), "PNG (*.png);;JPEG (*.JPEG);;BMP Files (*.bmp);;SVG (*.svg)" );
     if (!fileName.isNull())
     {
         focusObjectChanged(nullptr);
-        gridToggled(true);
         for (QGraphicsLineItem *line : gridLines) {
             delete line;
         }
@@ -338,18 +457,32 @@ void CreatorViewModel::exportAsImageTriggered()
         scene->render(&painter);
         image.save(fileName);
         scene->setSceneRect(QRect());
-        window->getGraphicsView()->centerOn(scene->itemsBoundingRect().center());
+        mainWindow->getGraphicsView()->centerOn(scene->itemsBoundingRect().center());
 
         scene->addItem(gridBorder);
-        gridResized(currentStuds, currentGridSize);
+        drawGrid(currentStuds, currentGridSize);
     }
 }
 
 void CreatorViewModel::rotateObjectTriggered()
 {
-    if (CreatorRail* focusRail = dynamic_cast<CreatorRail*>(focusObject)) {
-        focusRail->toggleRailAngle();
-        update(POSITION_CHANGED, focusObject);
+    if (focusObject) {
+        switch (focusObject->getObjectType()) {
+        case CreatorObject::OBJECT_RAIL: {
+            CreatorRail *focusRail = static_cast<CreatorRail*>(focusObject);
+            if (focusRail->getRailToggle() == CreatorRail::TOGGLE_NORMAL) {
+                focusRail->toggleRailAngle();
+                viewModelUpdate(POINTER_CHANGED, focusObject);
+            }
+            break;
+        }
+        case CreatorObject::OBJECT_STATION:
+        {
+            CreatorStation *focusStation = static_cast<CreatorStation*>(focusObject);
+            focusStation->toggleStationAngle();
+            break;
+        }
+        }
     }
 }
 
@@ -357,7 +490,9 @@ void CreatorViewModel::rotateToggleTriggered()
 {
     if (CreatorRail* focusRail = dynamic_cast<CreatorRail*>(focusObject)) {
         focusRail->toggleRailSwitch();
-        update(POSITION_CHANGED, focusObject);
+        if (focusRail->getRailType() == CreatorRail::RAIL_CURVED)
+            lastRailToggle = focusRail->getRailToggle();
+        viewModelUpdate(POINTER_CHANGED, focusObject);
     }
 }
 
@@ -365,7 +500,7 @@ void CreatorViewModel::changeConnectionTriggered()
 {
     if (CreatorRail* focusRail = dynamic_cast<CreatorRail*>(focusObject)) {
         focusRail->toggleRailPoint();
-        update(POSITION_CHANGED, focusObject);
+        viewModelUpdate(POINTER_CHANGED, focusObject);
     }
 }
 
@@ -374,10 +509,26 @@ void CreatorViewModel::removeObjectTriggered()
     if (focusObject) {
         switch (focusObject->getObjectType()) {
         case CreatorObject::OBJECT_RAIL:
-            removeRail();
+        {
+            CreatorRail *focusRail = static_cast<CreatorRail*>(focusObject);
+            for (CreatorRail* rail : focusRail->getConnectedRails()) {
+                rail->removeConnectedRail(focusRail);
+                rail->toggleRailPoint();
+            }
+            CreatorRail *newFocusRail = focusRail->getConnectedRail();
+            focusObject = nullptr;
+            objectsList.removeOne(focusRail);
+            delete focusRail;
+            if (newFocusRail)
+                newFocusRail->toggleRailPoint();
+            focusObjectChanged(newFocusRail);
             break;
+        }
         case CreatorObject::OBJECT_STATION:
-//            removeStation();
+            objectsList.removeOne(focusObject);
+            delete focusObject;
+            focusObject = nullptr;
+            focusObjectChanged(nullptr);
             break;
         }
     }
@@ -385,15 +536,17 @@ void CreatorViewModel::removeObjectTriggered()
 
 void CreatorViewModel::removeAllTriggered()
 {
-    int confirm = removeAllConfirm.exec();
+    if (!objectsList.isEmpty()) {
+        int confirm = removeAllConfirm.exec();
 
-    if (confirm == QMessageBox::Ok) {
-        focusObject = nullptr;
-        for (CreatorObject *object : objectsList) {
-            objectsList.removeOne(object);
-            delete object;
+        if (confirm == QMessageBox::Ok) {
+            focusObject = nullptr;
+            for (CreatorObject *object : objectsList) {
+                objectsList.removeOne(object);
+                delete object;
+            }
+            viewModelUpdate(OBJECT_LOST_FOCUS);
         }
-        update(FOCUS_LOST);
     }
 }
 
@@ -404,6 +557,7 @@ void CreatorViewModel::gridSettingsTriggered()
 
 void CreatorViewModel::gridToggled(bool checked)
 {
+    gridIsHidden = checked;
     if (checked) {
         for (QGraphicsLineItem *line : gridLines) {
             line->hide();
@@ -417,7 +571,7 @@ void CreatorViewModel::gridToggled(bool checked)
     }
 }
 
-void CreatorViewModel::gridResized(qint8 studsPerPlate, int gridSize)
+void CreatorViewModel::gridResized(int gridPlateSize, int gridSize)
 {
-    drawGrid(studsPerPlate, gridSize, true);
+    drawGrid(getPlateSize(PlateSize(gridPlateSize)), gridSize, true);
 }

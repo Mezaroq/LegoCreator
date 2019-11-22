@@ -10,6 +10,12 @@
     <height>525</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -104,6 +110,7 @@
    <addaction name="actionSave_project"/>
    <addaction name="actionExport_as_image"/>
    <addaction name="separator"/>
+   <addaction name="actionChange_pointer"/>
    <addaction name="actionRotate_object"/>
    <addaction name="actionToggle_object"/>
    <addaction name="actionSwitch_point"/>
@@ -111,6 +118,7 @@
    <addaction name="actionRemove_object"/>
    <addaction name="actionRemove_all_objects"/>
    <addaction name="separator"/>
+   <addaction name="actionPointer_settings"/>
    <addaction name="actionGrid_settings"/>
    <addaction name="actionToggle_grid"/>
    <addaction name="actionFullscreen_mode"/>
@@ -243,6 +251,30 @@
    </property>
    <property name="toolTip">
     <string>Fullscreen mode</string>
+   </property>
+  </action>
+  <action name="actionChange_pointer">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_pointer_disabled.svg</normaloff>:/creator/resources/icons/icon_bar_pointer_disabled.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Change pointer</string>
+   </property>
+   <property name="toolTip">
+    <string>Change starting position</string>
+   </property>
+  </action>
+  <action name="actionPointer_settings">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_pointer_settings.svg</normaloff>:/creator/resources/icons/icon_bar_pointer_settings.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Pointer settings</string>
+   </property>
+   <property name="toolTip">
+    <string>Pointer settings</string>
    </property>
   </action>
  </widget>
