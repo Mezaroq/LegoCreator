@@ -1,13 +1,14 @@
 #include "CreatorStation.h"
 
-CreatorStation::CreatorStation(StationType stationType, QPointF stationPosition, qreal stationAngle, QPoint stationPositionOffset, QPoint stationTransformOffset) :
+CreatorStation::CreatorStation(qint32 objectID, StationType stationType, QPointF stationPosition, qreal stationAngle, QPoint stationPositionOffset, QPoint stationTransformOffset) :
     CreatorObject(getResource(stationType), CreatorObject::OBJECT_STATION)
 {
     this->stationType = stationType;
-    this->stationPosition = stationPosition;
+    this->stationPosition = stationPosition + stationPositionOffset;
     this->stationAngle = stationAngle;
     this->stationPositionOffset = stationPositionOffset;
     this->stationTransformOffset = stationTransformOffset;
+    this->stationID = objectID;
     prepareStation();
 }
 
@@ -19,13 +20,43 @@ QString CreatorStation::getResource(CreatorStation::StationType stationType)
     case CreatorStation::STATION_FREIGHT:
         return ":/creator/resources/objects/object_station_freight.svg";
     case CreatorStation::STATION_SMALL:
-        return "";
+        return ":/creator/resources/objects/object_station_small.svg";
     }
 }
 
-QPointF CreatorStation::getStationPosition()
+qint32 CreatorStation::getObjectID()
 {
-    return stationPosition;
+    return stationID;
+}
+
+CreatorStation::StationType CreatorStation::getStationType() const
+{
+    return stationType;
+}
+
+QPointF CreatorStation::getStationPosition() const
+{
+    return stationPosition - stationPositionOffset;
+}
+
+qreal CreatorStation::getStationAngle() const
+{
+    return stationAngle;
+}
+
+QPoint CreatorStation::getStationPositionOffset() const
+{
+    return stationPositionOffset;
+}
+
+QPoint CreatorStation::getStationTransformOffset() const
+{
+    return stationTransformOffset;
+}
+
+QPointF CreatorStation::getStationPointPosition()
+{
+    return stationPosition - stationPositionOffset;
 }
 
 void CreatorStation::prepareStation()
@@ -38,7 +69,7 @@ void CreatorStation::prepareStation()
 
 void CreatorStation::setStationPosition()
 {
-    setPos(stationPosition + stationPositionOffset);
+    setPos(stationPosition);
 }
 
 void CreatorStation::moveStation(QPointF position)

@@ -7,7 +7,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsItem>
 #include <QtMath>
-#include <QDebug>
 
 class CreatorScene : public QGraphicsScene
 {
@@ -35,7 +34,6 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
-    virtual void keyPressEvent(QKeyEvent *keyEvent) override;
 
 signals:
     void focusObjectMoved(QPointF newPosition);

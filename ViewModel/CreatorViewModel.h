@@ -9,19 +9,18 @@
 #include <View/CreatorScene.h>
 #include <View/CreatorGridSettings.h>
 #include <QGraphicsEffect>
-#include <QPainter>
+#include <QInputDialog>
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QColorDialog>
 #include <QCoreApplication>
 #include <QObject>
 #include <QHash>
 #include <QList>
-#include <QMessageBox>
-#include <QDebug>
 
 class CreatorViewModel : public QObject
 {
     Q_OBJECT
-
 public:
     enum PlateSize{
         STUD_1,
@@ -41,6 +40,7 @@ public:
     CreatorViewModel(CreatorScene *scene, MainWindow *mainWindow);
     virtual ~CreatorViewModel();
     int  getPlateSize(PlateSize gridPlateSize);
+    CreatorObject* getObjectByID(qint32 id);
     void viewModelSetup();
     void viewModelUpdate(UpdateReason reason, CreatorObject *object = nullptr);
     void drawGrid(int studsPerPlate, int gridSize, bool resize = false, qreal gridLineSize = 0.25);
@@ -65,6 +65,7 @@ private:
     QGraphicsRectItem           *gridBorder;
     CreatorGridSettings         *gridSettings;
     QMessageBox                 removeAllConfirm;
+    QColorDialog                *color;
 
 public slots:
     void menuItemClicked(QListWidgetItem *item);
@@ -80,10 +81,11 @@ public slots:
     void rotateToggleTriggered();
     void changeConnectionTriggered();
     void removeObjectTriggered();
-    void removeAllTriggered();
+    void removeAllTriggered(bool fileOpen  = false);
     void gridSettingsTriggered();
     void gridToggled(bool checked);
     void gridResized(int gridPlateSize, int gridSize);
+    void backgroudColorChanged();
 };
 
 #endif // CREATORVIEWMODEL_H

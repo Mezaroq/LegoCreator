@@ -27,6 +27,7 @@ public:
     QAction* getActionToggleGrid();
     QAction* getActionChangePointer();
     QAction* getActionPointerSettings();
+    QAction* getActionBackgroudColor();
 
     ~MainWindow();
 private slots:

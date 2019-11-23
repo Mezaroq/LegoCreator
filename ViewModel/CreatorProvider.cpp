@@ -19,6 +19,7 @@ void CreatorProvider::createMenuItems()
     menuItems.insert(CreatorMenu::RAIL_RIGHT_SWITCH,   new CreatorMenu(CreatorMenu::RAIL_RIGHT_SWITCH, "Right\nSwitch"));
     menuItems.insert(CreatorMenu::STATION_PASSENGER,   new CreatorMenu(CreatorMenu::STATION_PASSENGER, "Passenger\nStation"));
     menuItems.insert(CreatorMenu::STATION_FREIGHT,     new CreatorMenu(CreatorMenu::STATION_FREIGHT, "Freight\nStation"));
+    menuItems.insert(CreatorMenu::STATION_SMALL,       new CreatorMenu(CreatorMenu::STATION_SMALL, "Small\nStation"));
 }
 
 void CreatorProvider::createConnections()
@@ -39,6 +40,7 @@ void CreatorProvider::createConnections()
     connect(actionToggle_grid, SIGNAL(toggled(bool)), viewModel, SLOT(gridToggled(bool)));
     connect(actionChange_pointer, SIGNAL(triggered()), viewModel, SLOT(pointerChanged()));
     connect(actionPointer_settings, SIGNAL(triggered()), viewModel, SLOT(pointerSettingsTriggered()));
+    connect(actionBackgroud_color, SIGNAL(triggered()), viewModel, SLOT(backgroudColorChanged()));
 }
 
 void CreatorProvider::createObjects()
@@ -57,6 +59,7 @@ void CreatorProvider::createObjects()
     actionToggle_grid = mainWindow.getActionToggleGrid();
     actionChange_pointer = mainWindow.getActionChangePointer();
     actionPointer_settings = mainWindow.getActionPointerSettings();
+    actionBackgroud_color = mainWindow.getActionBackgroudColor();
     scene = new CreatorScene();
     viewModel = new CreatorViewModel(scene, &mainWindow);
 }

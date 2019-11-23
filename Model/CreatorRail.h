@@ -29,19 +29,7 @@ public:
         POINT_SWITCH
     };
 
-    /*!
-     * \brief CreatorRail
-     * \param railType
-     * \param railPosition              pozycja startowa
-     * \param railAngle                 kąt toru
-     * \param railPointRadius           promienie do obliczania punktow dla kolejnych odcinkow wzgledem obecnego
-     * \param railPointAngleOffset      offsety kata dla kolejnych odcinkow wzgledem obecnego
-     * \param railToggleRadius          promienie do obliczania punktów zmiany orientacji
-     * \param railToggleAngleOffset     offsety do obliczania punktow zmiany orientacji
-     * \param railPositionOffset        offset pozycji np. zakret posiada offset bo boundingRect zaczyna sie nie w miejscu gdzie railPosition
-     * \param railTransformOffset       offset dla transformacji qt (dla rotacji)
-     */
-    CreatorRail(RailType railType,
+    CreatorRail(qint32 objectID, RailType railType,
                 QPointF railPosition,
                 qreal railAngle,
                 QHash<qint8, qreal> railPointRadius,
@@ -52,23 +40,31 @@ public:
                 QPoint railTransformOffset = QPoint(0, 0));
     static QString      getResource(RailType railType);
     static qint8        getRailPointKey(RailToggle railToggle, RailPoint railPoint);
-    RailType            getRailType();
-    QPointF             getRailPosition();
-    qreal               getRailAngle();
+    virtual qint32      getObjectID() override;
+    RailType            getRailType() const;
+    QPointF             getRailPosition() const;
+    qreal               getRailAngle() const;
+    QHash<qint8, qreal> getRailPointRadius() const;
+    QHash<qint8, qreal> getRailPointAngleOffset() const;
+    QHash<qint8, qreal> getRailToggleRadius() const;
+    QHash<qint8, qreal> getRailToggleAngleOffset() const;
+    QPoint              getRailPositionOffset() const;
+    QPoint              getRailTransformOffset() const;
     QPointF             getNextRailPosition();
     qreal               getNextRailAngle();
     QPointF             getToggleRailSwitch();
     QPointF             getToggleRailPoint();
-    RailToggle          getRailToggle();
-    RailPoint           getRailPoint();
+    RailToggle          getRailToggle() const;
+    RailPoint           getRailPoint() const;
     CreatorRail*        getConnectedRail();
     QHash<RailPoint, CreatorRail*> getConnectedRails();
+    QHash<qint8, qint32> getConnectedRailsByID();
     void                setConnectedRail(RailPoint railPoint, CreatorRail *connectedRail);
     void                setRailPosition();
     void                setRailAngle();
     void                setRailIndex();
-    void                setRailRotate(bool rotate);
-    void                setRailToggle(bool toggle);
+    void                setRailToggle(const RailToggle &value);
+    void                setRailPoint(const RailPoint &value);
     void                removeConnectedRail(CreatorRail *connectedRail);
     void                toggleRailAngle();
     void                toggleRailSwitch();
@@ -77,6 +73,7 @@ public:
 
 private:
     static const int    TOGGLE_SIZE = 3;
+    qint32              railID;
     QHash<RailPoint, CreatorRail*> connectedRails;
     RailType            railType;
     QPointF             railPosition;

@@ -119,6 +119,7 @@
    <addaction name="actionRemove_all_objects"/>
    <addaction name="separator"/>
    <addaction name="actionPointer_settings"/>
+   <addaction name="actionBackground_color"/>
    <addaction name="actionGrid_settings"/>
    <addaction name="actionToggle_grid"/>
    <addaction name="actionFullscreen_mode"/>
@@ -275,6 +276,18 @@
    </property>
    <property name="toolTip">
     <string>Pointer settings</string>
+   </property>
+  </action>
+  <action name="actionBackground_color">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_scene_color.svg</normaloff>:/creator/resources/icons/icon_bar_scene_color.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Background color</string>
+   </property>
+   <property name="toolTip">
+    <string>Background color</string>
    </property>
   </action>
  </widget>

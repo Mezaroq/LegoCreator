@@ -19,3 +19,11 @@ int CreatorObject::getObjectIndexValue(CreatorObject::ObjectType objectType)
         return 2000;
     }
 }
+
+qint32 CreatorObject::getNextObjectID(int startValue)
+{
+    static qint32 OBJECT_ID = 0;
+    if (startValue != 0)
+        OBJECT_ID = startValue;
+    return OBJECT_ID++;
+}

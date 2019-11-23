@@ -1,7 +1,5 @@
 #include "CreatorViewModel.h"
 
-#include <QInputDialog>
-
 CreatorViewModel::CreatorViewModel(CreatorScene *scene, MainWindow *mainWindow)
 {
     this->scene = scene;
@@ -27,6 +25,17 @@ int CreatorViewModel::getPlateSize(CreatorViewModel::PlateSize gridPlateSize)
     case CreatorViewModel::STUD_32:
         return 32;
     }
+    return 1;
+}
+
+CreatorObject *CreatorViewModel::getObjectByID(qint32 id)
+{
+    for (CreatorObject *object : objectsList) {
+        if (object->getObjectID() == id) {
+            return object;
+        }
+    }
+    return nullptr;
 }
 
 void CreatorViewModel::viewModelSetup()
@@ -37,7 +46,6 @@ void CreatorViewModel::viewModelSetup()
     removeAllConfirm.iconPixmap();
 
     gridBorder = new QGraphicsRectItem();
-    gridBorder->setBrush(QColor(252, 252, 252));
     scene->addItem(gridBorder);
     drawGrid(currentStuds, currentGridSize);
 
@@ -54,6 +62,9 @@ void CreatorViewModel::viewModelSetup()
     positionPointer->setCacheMode(QGraphicsItem::ItemCoordinateCache);
     positionPointer->setCachingEnabled(true);
     scene->addItem(positionPointer);
+
+    color = new QColorDialog(mainWindow);
+    color->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
 }
 
 void CreatorViewModel::createRail(CreatorRail::RailType railType)
@@ -83,7 +94,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 90);
         railToggleRadius.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
+        newRail = new CreatorRail(CreatorObject::getNextObjectID(), railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
         break;
     case CreatorRail::RAIL_DOUBLE_FLEX:
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 80);
@@ -92,7 +103,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 90);
         railToggleRadius.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
+        newRail = new CreatorRail(CreatorObject::getNextObjectID(), railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
         break;
     case CreatorRail::RAIL_STRAIGHT:
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 160);
@@ -101,7 +112,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railPointAngleOffset.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_REVERSE), 90);
         railToggleRadius.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
+        newRail = new CreatorRail(CreatorObject::getNextObjectID(), railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
         break;
     case CreatorRail::RAIL_CURVED:
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 140.47);
@@ -116,7 +127,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railToggleRadius.insert(CreatorRail::TOGGLE_REVERSE, 174.69);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_REVERSE, 37.94);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, QPoint(0, -28), QPoint(0, 28));
+        newRail = new CreatorRail(CreatorObject::getNextObjectID(), railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, QPoint(0, -28), QPoint(0, 28));
         if (toggle == CreatorRail::TOGGLE_REVERSE || lastRailToggle == CreatorRail::TOGGLE_REVERSE) {
             newRail->toggleRailSwitch();
             lastRailToggle = CreatorRail::TOGGLE_REVERSE;
@@ -149,7 +160,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_REVERSE, 14.04);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_SWITCH, 13.76);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, QPoint(0, -127), QPoint(0, 127));
+        newRail = new CreatorRail(CreatorObject::getNextObjectID(), railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, QPoint(0, -127), QPoint(0, 127));
         break;
     case CreatorRail::RAIL_RIGHT_SWITCH:
         railPointRadius.insert(CreatorRail::getRailPointKey(CreatorRail::TOGGLE_NORMAL, CreatorRail::POINT_NORMAL), 320);
@@ -176,7 +187,7 @@ void CreatorViewModel::createRail(CreatorRail::RailType railType)
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_NORMAL, 0);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_REVERSE, 14.04);
         railToggleAngleOffset.insert(CreatorRail::TOGGLE_SWITCH, 11.03);
-        newRail = new CreatorRail(railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
+        newRail = new CreatorRail(CreatorObject::getNextObjectID(), railType, railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset);
         break;
     }
     if (focusRail) {
@@ -195,12 +206,13 @@ void CreatorViewModel::createStation(CreatorStation::StationType stationType)
 
     switch (stationType) {
     case CreatorStation::STATION_PASSENGER:
-        station = new CreatorStation(stationType, stationPosition, stationAngle, QPoint(0, -40), QPoint(0, 40));
+        station = new CreatorStation(CreatorObject::getNextObjectID(), stationType, stationPosition, stationAngle, QPoint(0, -40), QPoint(0, 40));
         break;
     case CreatorStation::STATION_FREIGHT:
-        station = new CreatorStation(stationType, stationPosition, stationAngle, QPoint(-10, -10), QPoint(10, 10));
+        station = new CreatorStation(CreatorObject::getNextObjectID(), stationType, stationPosition, stationAngle, QPoint(-10, -10), QPoint(10, 10));
         break;
     case CreatorStation::STATION_SMALL:
+        station = new CreatorStation(CreatorObject::getNextObjectID(), stationType, stationPosition, stationAngle, QPoint(0, -20), QPoint(0, 20));
         break;
     }
     objectCreated(station);
@@ -228,10 +240,10 @@ void CreatorViewModel::drawGrid(int studsPerPlate, int gridSize, bool resize, qr
         gridBorder->hide();
 
     for (int plate_position = MIN_GRID_POSITION; plate_position <= MAX_GRID_POSITION; plate_position+=PLATE_SIZE) {
-        gridLines.append(scene->addLine(QLineF(plate_position, MIN_GRID_POSITION, plate_position, MAX_GRID_POSITION), QPen(Qt::gray, gridLineSize)));
+        gridLines.append(scene->addLine(QLineF(plate_position, MIN_GRID_POSITION, plate_position, MAX_GRID_POSITION), QPen(Qt::darkGray, gridLineSize)));
         if (gridIsHidden)
             gridLines.last()->hide();
-        gridLines.append(scene->addLine(QLineF(MIN_GRID_POSITION, plate_position, MAX_GRID_POSITION, plate_position), QPen(Qt::gray, gridLineSize)));
+        gridLines.append(scene->addLine(QLineF(MIN_GRID_POSITION, plate_position, MAX_GRID_POSITION, plate_position), QPen(Qt::darkGray, gridLineSize)));
         if (gridIsHidden)
             gridLines.last()->hide();
     }
@@ -248,7 +260,7 @@ void CreatorViewModel::viewModelUpdate(CreatorViewModel::UpdateReason reason, Cr
         case CreatorObject::OBJECT_RAIL:
             break;
         case CreatorObject::OBJECT_STATION:
-            positionPointer->setPos(station->getStationPosition() + POSITION_POINTER_OFFSET);
+            positionPointer->setPos(station->getStationPointPosition() + POSITION_POINTER_OFFSET);
             break;
         }
         break;
@@ -258,12 +270,14 @@ void CreatorViewModel::viewModelUpdate(CreatorViewModel::UpdateReason reason, Cr
             if (!rail->getToggleRailPoint().isNull()) {
                 positionPointer->setPos(rail->getToggleRailPoint());
                 positionPointer->show();
+                positionPointerState = CreatorScene::POINTER_DISABLED;
             } else {
                 positionPointer->hide();
+                positionPointerState = CreatorScene::POINTER_DISABLED;
             }
             break;
         case CreatorObject::OBJECT_STATION:
-            positionPointer->setPos(station->getStationPosition() + POSITION_POINTER_OFFSET);
+            positionPointer->setPos(station->getStationPointPosition() + POSITION_POINTER_OFFSET);
             positionPointer->show();
             positionPointerState = CreatorScene::POINTER_DISABLED;
             break;
@@ -279,7 +293,7 @@ void CreatorViewModel::viewModelUpdate(CreatorViewModel::UpdateReason reason, Cr
             positionPointer->setPos(rail->getToggleRailPoint());
             break;
         case CreatorObject::OBJECT_STATION:
-            positionPointer->setPos(station->getStationPosition());
+            positionPointer->setPos(station->getStationPointPosition());
             positionPointer->show();
             break;
         }
@@ -372,11 +386,13 @@ void CreatorViewModel::pointerChanged(bool isSet, bool positionChanged, QPointF 
         scene->setPointerState(positionPointerState);
         mainWindow->getActionChangePointer()->setIcon(QIcon(":/creator/resources/icons/icon_bar_pointer_enabled.svg"));
         positionPointer->show();
-        positionPointer->setPos(QPoint(0, 0) + POSITION_POINTER_OFFSET);
+//        positionPointer->setPos(QPoint(0, 0) + POSITION_POINTER_OFFSET); //probably this should be disabled
+        scene->update();
         break;
     case CreatorScene::POINTER_ENABLED:
         if (positionChanged) {
             positionPointer->setPos(position + POSITION_POINTER_OFFSET);
+            scene->update();
         } else if (isSet) {
             positionPointerState = CreatorScene::POINTER_SET;
             scene->setPointerState(positionPointerState);
@@ -389,7 +405,6 @@ void CreatorViewModel::pointerChanged(bool isSet, bool positionChanged, QPointF 
         }
         break;
     }
-    scene->update();
 }
 
 void CreatorViewModel::pointerSettingsTriggered()
@@ -419,7 +434,6 @@ void CreatorViewModel::focusObjectMoved(QPointF newPosition)
         CreatorStation *station = static_cast<CreatorStation*>(focusObject);
         station->moveStation(newPosition);
         viewModelUpdate(OBJECT_MOVED, station);
-        qDebug() << newPosition;
         break;
     }
     default:
@@ -429,17 +443,140 @@ void CreatorViewModel::focusObjectMoved(QPointF newPosition)
 
 void CreatorViewModel::openProjectTriggered()
 {
+    QString fileName = QFileDialog::getOpenFileName(mainWindow, "Open Project", QCoreApplication::applicationDirPath(), "Lego Creator Project (*.lcp)");
+    if (!fileName.isNull()) {
+        QFile file(fileName);
+        file.open(QIODevice::ReadOnly);
+        QDataStream in(&file);
+        qint8 objectType;
+        int nextObjectID;
+        in >> nextObjectID;
+        CreatorObject::getNextObjectID(nextObjectID);
+        removeAllTriggered(true);
+        QHash<CreatorRail*, QHash<qint8, qint32>> connectedRails;
 
+        while (!in.atEnd()) {
+            in >> objectType;
+            switch (CreatorObject::ObjectType(objectType)) {
+            case CreatorObject::OBJECT_RAIL:
+            {
+                qint32 objectID;
+                qint8 railType;
+                QPointF railPosition;
+                qreal railAngle;
+                QHash<qint8, qreal> railPointRadius;
+                QHash<qint8, qreal> railPointAngleOffset;
+                QHash<qint8, qreal> railToggleRadius;
+                QHash<qint8, qreal> railToggleAngleOffset;
+                QPoint railPositionOffset;
+                QPoint railTransformOffset;
+                qint8 railToggle;
+                qint8 railPoint;
+                QHash<qint8, qint32> connectedRailsByID;
+                in >> objectID;
+                in >> railType;
+                in >> railPosition;
+                in >> railAngle;
+                in >> railPointRadius;
+                in >> railPointAngleOffset;
+                in >> railToggleRadius;
+                in >> railToggleAngleOffset;
+                in >> railPositionOffset;
+                in >> railTransformOffset;
+                in >> railToggle;
+                in >> railPoint;
+                in >> connectedRailsByID;
+                CreatorRail *rail = new CreatorRail(objectID, CreatorRail::RailType(railType), railPosition, railAngle, railPointRadius, railPointAngleOffset, railToggleRadius, railToggleAngleOffset, railPositionOffset, railTransformOffset);
+                connectedRails.insert(rail, connectedRailsByID);
+                rail->setRailToggle(CreatorRail::RailToggle(railToggle));
+                rail->setRailPoint(CreatorRail::RailPoint(railPoint));
+                objectCreated(rail);
+                break;
+            }
+            case CreatorObject::OBJECT_STATION:
+            {
+                qint32 objectID;
+                qint8 stationType;
+                qreal stationAngle;
+                QPointF stationPosition;
+                QPoint stationPositionOffset;
+                QPoint stationTransformOffset;
+                in >> objectID;
+                in >> stationType;
+                in >> stationPosition;
+                in >> stationAngle;
+                in >> stationPositionOffset;
+                in >> stationTransformOffset;
+                CreatorStation *station = new CreatorStation(objectID, CreatorStation::StationType(stationType), stationPosition, stationAngle, stationPositionOffset, stationTransformOffset);
+                objectCreated(station);
+                break;
+            }
+            }
+        }
+        if (!connectedRails.isEmpty()) {
+            QHashIterator<CreatorRail*, QHash<qint8, qint32>> railList(connectedRails);
+            while (railList.hasNext()) {
+                railList.next();
+                QHashIterator<qint8, qint32> railConnectedRails(railList.value());
+                while (railConnectedRails.hasNext()) {
+                    railConnectedRails.next();
+                    railList.key()->setConnectedRail(CreatorRail::RailPoint(railConnectedRails.key()), static_cast<CreatorRail*>(getObjectByID(railConnectedRails.value()))); //tutaj jest problem lub w getObjectByID
+                }
+            }
+        }
+    }
 }
 
 void CreatorViewModel::saveProjectTriggered()
 {
+    QString fileName = QFileDialog::getSaveFileName(mainWindow, "Save Project", QCoreApplication::applicationDirPath(), "Lego Creator Project (*.lcp)");
+    if (!fileName.isNull()) {
+        QFile file(fileName);
+        file.open(QIODevice::WriteOnly);
+        QDataStream out(&file);
+        out << CreatorObject::getNextObjectID();
 
+        for (CreatorObject *object : objectsList) {
+            switch (object->getObjectType()) {
+            case CreatorObject::OBJECT_RAIL:
+            {
+                CreatorRail *rail = static_cast<CreatorRail*>(object);
+                out << qint8(object->getObjectType());
+                out << qint32(object->getObjectID());
+                out << qint8(rail->getRailType());
+                out << QPointF(rail->getRailPosition());
+                out << qreal(rail->getRailAngle());
+                out << QHash<qint8, qreal>(rail->getRailPointRadius());
+                out << QHash<qint8, qreal>(rail->getRailPointAngleOffset());
+                out << QHash<qint8, qreal>(rail->getRailToggleRadius());
+                out << QHash<qint8, qreal>(rail->getRailToggleAngleOffset());
+                out << QPoint(rail->getRailPositionOffset());
+                out << QPoint(rail->getRailTransformOffset());
+                out << qint8(rail->getRailToggle());
+                out << qint8(rail->getRailPoint());
+                out << QHash<qint8, qint32>(rail->getConnectedRailsByID());
+                break;
+            }
+            case CreatorObject::OBJECT_STATION:
+            {
+                CreatorStation *station = static_cast<CreatorStation*>(object);
+                out << qint8(object->getObjectType());
+                out << qint32(object->getObjectID());
+                out << qint8(station->getStationType());
+                out << QPointF(station->getStationPosition());
+                out << qreal(station->getStationAngle());
+                out << QPoint(station->getStationPositionOffset());
+                out << QPoint(station->getStationTransformOffset());
+                break;
+            }
+            }
+        }
+    }
 }
 
 void CreatorViewModel::exportAsImageTriggered()
 {
-    QString fileName= QFileDialog::getSaveFileName(mainWindow, "Save image", QCoreApplication::applicationDirPath(), "PNG (*.png);;JPEG (*.JPEG);;BMP Files (*.bmp);;SVG (*.svg)" );
+    QString fileName = QFileDialog::getSaveFileName(mainWindow, "Save Image", QCoreApplication::applicationDirPath(), "PNG (*.png);;JPEG (*.JPEG);;BMP Files (*.bmp);;SVG (*.svg)" );
     if (!fileName.isNull())
     {
         focusObjectChanged(nullptr);
@@ -534,10 +671,14 @@ void CreatorViewModel::removeObjectTriggered()
     }
 }
 
-void CreatorViewModel::removeAllTriggered()
+void CreatorViewModel::removeAllTriggered(bool fileOpen)
 {
     if (!objectsList.isEmpty()) {
-        int confirm = removeAllConfirm.exec();
+        int confirm;
+        if (!fileOpen)
+            confirm = removeAllConfirm.exec();
+        else
+            confirm = QMessageBox::Ok;
 
         if (confirm == QMessageBox::Ok) {
             focusObject = nullptr;
@@ -574,4 +715,11 @@ void CreatorViewModel::gridToggled(bool checked)
 void CreatorViewModel::gridResized(int gridPlateSize, int gridSize)
 {
     drawGrid(getPlateSize(PlateSize(gridPlateSize)), gridSize, true);
+}
+
+void CreatorViewModel::backgroudColorChanged()
+{
+    bool colorSelected = color->exec();
+    if (colorSelected)
+        scene->setBackgroundBrush(color->selectedColor());
 }

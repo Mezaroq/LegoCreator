@@ -79,6 +79,11 @@ QAction *MainWindow::getActionPointerSettings()
     return ui->actionPointer_settings;
 }
 
+QAction *MainWindow::getActionBackgroudColor()
+{
+    return ui->actionBackground_color;
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;

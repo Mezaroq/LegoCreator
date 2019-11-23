@@ -7,8 +7,6 @@
 #include <QScrollBar>
 #include <QtMath>
 
-#include <QDebug>
-
 class CreatorView : public QGraphicsView
 {
     Q_OBJECT
