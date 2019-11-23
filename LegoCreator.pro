@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,6 +16,7 @@ TEMPLATE = app
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+QMAKE_CXXFLAGS += -Wreturn-type
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -25,16 +26,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    Model/CreatorMenu.cpp \
+    Model/CreatorObject.cpp \
+    Model/CreatorRail.cpp \
+    Model/CreatorStation.cpp \
+    View/CreatorGridSettings.cpp \
+    View/CreatorScene.cpp \
+    View/CreatorView.cpp \
+    ViewModel/CreatorProvider.cpp \
+    ViewModel/CreatorViewModel.cpp \
         main.cpp \
-        mainwindow.cpp
+    View/MainWindow.cpp
 
 HEADERS += \
-        mainwindow.h
+    Model/CreatorMenu.h \
+    Model/CreatorObject.h \
+    Model/CreatorRail.h \
+    Model/CreatorStation.h \
+    View/CreatorGridSettings.h \
+    View/CreatorScene.h \
+    View/CreatorView.h \
+    View/MainWindow.h \
+    ViewModel/CreatorProvider.h \
+    ViewModel/CreatorViewModel.h
 
 FORMS += \
-        mainwindow.ui
+        View/creatorgridsettings.ui \
+        View/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc

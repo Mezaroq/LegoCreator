@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>868</width>
+    <height>525</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item alignment="Qt::AlignLeft">
+     <widget class="QListWidget" name="listWidget">
+      <property name="minimumSize">
+       <size>
+        <width>220</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="isWrapping" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>200</width>
+        <height>110</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="Line" name="line">
+      <property name="windowModality">
+       <enum>Qt::NonModal</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="CreatorView" name="graphicsView">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen_project"/>
+   <addaction name="actionSave_project"/>
+   <addaction name="actionExport_as_image"/>
+   <addaction name="separator"/>
+   <addaction name="actionChange_pointer"/>
+   <addaction name="actionRotate_object"/>
+   <addaction name="actionToggle_object"/>
+   <addaction name="actionSwitch_point"/>
+   <addaction name="separator"/>
+   <addaction name="actionRemove_object"/>
+   <addaction name="actionRemove_all_objects"/>
+   <addaction name="separator"/>
+   <addaction name="actionPointer_settings"/>
+   <addaction name="actionBackground_color"/>
+   <addaction name="actionGrid_settings"/>
+   <addaction name="actionToggle_grid"/>
+   <addaction name="actionFullscreen_mode"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpen_project">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_open_file.svg</normaloff>:/creator/resources/icons/icon_bar_open_file.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Open project...</string>
+   </property>
+  </action>
+  <action name="actionSave_project">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_save_file.svg</normaloff>:/creator/resources/icons/icon_bar_save_file.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save project...</string>
+   </property>
+  </action>
+  <action name="actionExport_as_image">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_export.svg</normaloff>:/creator/resources/icons/icon_bar_export.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Export as image...</string>
+   </property>
+  </action>
+  <action name="actionRotate_object">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_rotate.svg</normaloff>:/creator/resources/icons/icon_bar_rotate.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Rotate object</string>
+   </property>
+   <property name="toolTip">
+    <string>Rotate object</string>
+   </property>
+  </action>
+  <action name="actionToggle_object">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_rotate_toggle.svg</normaloff>:/creator/resources/icons/icon_bar_rotate_toggle.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Toggle object</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle object</string>
+   </property>
+  </action>
+  <action name="actionSwitch_point">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_switch_connection.svg</normaloff>:/creator/resources/icons/icon_bar_switch_connection.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Switch point</string>
+   </property>
+   <property name="toolTip">
+    <string>Switch point</string>
+   </property>
+  </action>
+  <action name="actionRemove_object">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_delete.svg</normaloff>:/creator/resources/icons/icon_bar_delete.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Remove object</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove object</string>
+   </property>
+  </action>
+  <action name="actionRemove_all_objects">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_delete_all.svg</normaloff>:/creator/resources/icons/icon_bar_delete_all.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Remove all objects</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove all objects</string>
+   </property>
+  </action>
+  <action name="actionGrid_settings">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_grid_settings.svg</normaloff>:/creator/resources/icons/icon_bar_grid_settings.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Grid settings</string>
+   </property>
+   <property name="toolTip">
+    <string>Grid settings</string>
+   </property>
+  </action>
+  <action name="actionToggle_grid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_grid_show.svg</normaloff>:/creator/resources/icons/icon_bar_grid_show.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Toggle grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle grid</string>
+   </property>
+  </action>
+  <action name="actionFullscreen_mode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_fullscreen_off.svg</normaloff>:/creator/resources/icons/icon_bar_fullscreen_off.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Fullscreen mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Fullscreen mode</string>
+   </property>
+  </action>
+  <action name="actionChange_pointer">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_pointer_disabled.svg</normaloff>:/creator/resources/icons/icon_bar_pointer_disabled.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Change pointer</string>
+   </property>
+   <property name="toolTip">
+    <string>Change starting position</string>
+   </property>
+  </action>
+  <action name="actionPointer_settings">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_pointer_settings.svg</normaloff>:/creator/resources/icons/icon_bar_pointer_settings.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Pointer settings</string>
+   </property>
+   <property name="toolTip">
+    <string>Pointer settings</string>
+   </property>
+  </action>
+  <action name="actionBackground_color">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/creator/resources/icons/icon_bar_scene_color.svg</normaloff>:/creator/resources/icons/icon_bar_scene_color.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Background color</string>
+   </property>
+   <property name="toolTip">
+    <string>Background color</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CreatorView</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">View/CreatorView.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
