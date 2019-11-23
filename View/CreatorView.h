@@ -7,8 +7,6 @@
 #include <QScrollBar>
 #include <QtMath>
 
-#include <QDebug>
-
 class CreatorView : public QGraphicsView
 {
     Q_OBJECT
@@ -18,7 +16,7 @@ public:
 private:
     QPoint* startPoint = new QPoint();
     const double SCALE_FACTOR = 1.2;
-    const double MAX_ZOOM = qPow(SCALE_FACTOR, 6);
+    const double MAX_ZOOM = qPow(SCALE_FACTOR, 4);
     const double MIN_ZOOM = qPow(SCALE_FACTOR, -12);
     double currentZoom = 1;
 

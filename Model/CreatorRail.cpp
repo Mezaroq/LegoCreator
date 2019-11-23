@@ -1,6 +1,6 @@
 #include "CreatorRail.h"
 
-CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, qreal railAngle,
+CreatorRail::CreatorRail(qint32 objectID, CreatorRail::RailType railType, QPointF railPosition, qreal railAngle,
                          QHash<qint8, qreal> railPointRadius,
                          QHash<qint8, qreal> railPointAngleOffset,
                          QHash<qint8, qreal> railToggleRadius,
@@ -18,6 +18,7 @@ CreatorRail::CreatorRail(CreatorRail::RailType railType, QPointF railPosition, q
     this->railToggleAngleOffset = railToggleAngleOffset;
     this->railPositionOffset = railPositionOffset;
     this->railTransformOffset = railTransformOffset;
+    this->railID = objectID;
     prepareRail();
 }
 
@@ -44,9 +45,54 @@ qint8 CreatorRail::getRailPointKey(CreatorRail::RailToggle railToggle, CreatorRa
     return (railToggle * TOGGLE_SIZE) + railPoint;
 }
 
-CreatorRail::RailType CreatorRail::getRailType()
+qint32 CreatorRail::getObjectID()
+{
+    return railID;
+}
+
+CreatorRail::RailType CreatorRail::getRailType() const
 {
     return railType;
+}
+
+QPointF CreatorRail::getRailPosition() const
+{
+    return railPosition;
+}
+
+qreal CreatorRail::getRailAngle() const
+{
+    return railAngle;
+}
+
+QHash<qint8, qreal> CreatorRail::getRailPointRadius() const
+{
+    return railPointRadius;
+}
+
+QHash<qint8, qreal> CreatorRail::getRailPointAngleOffset() const
+{
+    return railPointAngleOffset;
+}
+
+QHash<qint8, qreal> CreatorRail::getRailToggleRadius() const
+{
+    return railToggleRadius;
+}
+
+QHash<qint8, qreal> CreatorRail::getRailToggleAngleOffset() const
+{
+    return railToggleAngleOffset;
+}
+
+QPoint CreatorRail::getRailPositionOffset() const
+{
+    return railPositionOffset;
+}
+
+QPoint CreatorRail::getRailTransformOffset() const
+{
+    return railTransformOffset;
 }
 
 QPointF CreatorRail::getNextRailPosition()
@@ -198,12 +244,12 @@ void CreatorRail::prepareRail()
     setTransformOriginPoint(railTransformOffset);
 }
 
-CreatorRail::RailToggle CreatorRail::getRailToggle()
+CreatorRail::RailToggle CreatorRail::getRailToggle() const
 {
     return railToggle;
 }
 
-CreatorRail::RailPoint CreatorRail::getRailPoint()
+CreatorRail::RailPoint CreatorRail::getRailPoint() const
 {
     return railPoint;
 }
@@ -218,6 +264,17 @@ CreatorRail *CreatorRail::getConnectedRail()
 QHash<CreatorRail::RailPoint, CreatorRail *> CreatorRail::getConnectedRails()
 {
     return connectedRails;
+}
+
+QHash<qint8, qint32> CreatorRail::getConnectedRailsByID()
+{
+    QHash<qint8, qint32> connectedRailsByID;
+    QHashIterator<RailPoint, CreatorRail*> i(connectedRails);
+    while (i.hasNext()) {
+        i.next();
+        connectedRailsByID.insert(i.key(), i.value()->getObjectID());
+    }
+    return connectedRailsByID;
 }
 
 void CreatorRail::setConnectedRail(RailPoint railPoint, CreatorRail *connectedRail)
@@ -240,6 +297,8 @@ void CreatorRail::toggleRailSwitch()
         case CreatorRail::RAIL_STRAIGHT:
             break;
         case CreatorRail::RAIL_CURVED:
+            if (connectedRails.contains(RailPoint::POINT_NORMAL))
+                return;
             if (railToggle == TOGGLE_NORMAL)
                 railToggle = TOGGLE_REVERSE;
             else
@@ -385,16 +444,28 @@ void CreatorRail::setRailIndex()
     case CreatorRail::RAIL_FLEX:
     case CreatorRail::RAIL_DOUBLE_FLEX:
     case CreatorRail::RAIL_STRAIGHT:
-        setZValue(1000);
+        setZValue(getObjectIndexValue(CreatorObject::OBJECT_RAIL) + 30);
         break;
     case CreatorRail::RAIL_CURVED:
-        setZValue(100);
+        setZValue(getObjectIndexValue(CreatorObject::OBJECT_RAIL) + 20);
         break;
     case CreatorRail::RAIL_LEFT_SWITCH:
     case CreatorRail::RAIL_RIGHT_SWITCH:
-        setZValue(10);
+        setZValue(getObjectIndexValue(CreatorObject::OBJECT_RAIL) + 10);
         break;
     }
+}
+
+void CreatorRail::setRailToggle(const RailToggle &value)
+{
+    railToggle = value;
+    setRailAngle();
+    setRailPosition();
+}
+
+void CreatorRail::setRailPoint(const RailPoint &value)
+{
+    railPoint = value;
 }
 
 void CreatorRail::removeConnectedRail(CreatorRail *connectedRail)

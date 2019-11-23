@@ -8,10 +8,6 @@ CreatorGridSettings::CreatorGridSettings(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle("Grid settings");
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
-    ui->studsPerPlateComboBox->setCurrentIndex(STUD_4);
-    ui->gridSizeSpinBox->setMaximum(100000);
-    ui->gridSizeSpinBox->setMinimum(0);
-    ui->gridSizeSpinBox->setValue(10000);
 }
 
 CreatorGridSettings::~CreatorGridSettings()
@@ -19,29 +15,18 @@ CreatorGridSettings::~CreatorGridSettings()
     delete ui;
 }
 
+QSpinBox *CreatorGridSettings::getGridSizeSpinBox()
+{
+    return ui->gridSizeSpinBox;
+}
+
+QComboBox *CreatorGridSettings::getStudsPerPlateComboBox()
+{
+    return ui->studsPerPlateComboBox;
+}
+
 void CreatorGridSettings::on_pushButton_clicked()
 {
-    qint8 studs = 0;
-    switch (ui->studsPerPlateComboBox->currentIndex()) {
-    case CreatorGridSettings::STUD_1:
-        studs = 1;
-        break;
-    case CreatorGridSettings::STUD_2:
-        studs = 2;
-        break;
-    case CreatorGridSettings::STUD_4:
-        studs = 4;
-        break;
-    case CreatorGridSettings::STUD_8:
-        studs = 8;
-        break;
-    case CreatorGridSettings::STUD_16:
-        studs = 16;
-        break;
-    case CreatorGridSettings::STUD_32:
-        studs = 32;
-        break;
-    }
-    emit gridSizeChanged(studs, ui->gridSizeSpinBox->value());
+    emit gridSizeChanged(ui->studsPerPlateComboBox->currentIndex(), ui->gridSizeSpinBox->value());
     hide();
 }

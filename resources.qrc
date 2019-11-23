@@ -26,5 +26,15 @@
         <file>resources/icons/icon_bar_grid_hide.svg</file>
         <file>resources/icons/icon_bar_grid_settings.svg</file>
         <file>resources/icons/icon_bar_grid_show.svg</file>
+        <file>resources/icons/icon_bar_pointer_enabled.svg</file>
+        <file>resources/icons/icon_bar_pointer_disabled.svg</file>
+        <file>resources/objects/object_station_freight.svg</file>
+        <file>resources/icons/icon_menu_station_freight.svg</file>
+        <file>resources/icons/icon_menu_station_passenger.svg</file>
+        <file>resources/objects/object_station_passenger.svg</file>
+        <file>resources/icons/icon_bar_pointer_settings.svg</file>
+        <file>resources/icons/icon_menu_station_small.svg</file>
+        <file>resources/objects/object_station_small.svg</file>
+        <file>resources/icons/icon_bar_scene_color.svg</file>
     </qresource>
 </RCC>

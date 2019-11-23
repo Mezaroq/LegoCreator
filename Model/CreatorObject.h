@@ -12,6 +12,9 @@ public:
     };
     CreatorObject(const QString object, const ObjectType objectType);
     ObjectType getObjectType() const;
+    int getObjectIndexValue(ObjectType objectType);
+    static qint32 getNextObjectID(int startValue = 0);
+    virtual qint32 getObjectID() = 0;
 
 private:
     ObjectType objectType;

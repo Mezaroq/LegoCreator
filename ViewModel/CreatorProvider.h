@@ -36,6 +36,9 @@ private:
     QAction *actionRemove_all_objects;
     QAction *actionGrid_settings;
     QAction *actionToggle_grid;
+    QAction *actionChange_pointer;
+    QAction *actionPointer_settings;
+    QAction *actionBackgroud_color;
 };
 
 #endif // CREATORPROVIDER_H
