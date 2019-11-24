@@ -28,6 +28,7 @@ void CreatorProvider::createConnections()
     connect(scene, SIGNAL(focusObjectChanged(CreatorObject*)), viewModel, SLOT(focusObjectChanged(CreatorObject*)));
     connect(scene, SIGNAL(pointerPositionChanged(bool, bool, QPointF)), viewModel, SLOT(pointerChanged(bool, bool, QPointF)));
     connect(scene, SIGNAL(focusObjectMoved(QPointF)), viewModel, SLOT(focusObjectMoved(QPointF)));
+    connect(scene, SIGNAL(removeObjectTriggered()), viewModel, SLOT(removeObjectTriggered()));
     connect(actionOpen_project, SIGNAL(triggered()), viewModel, SLOT(openProjectTriggered()));
     connect(actionSave_project, SIGNAL(triggered()), viewModel, SLOT(saveProjectTriggered()));
     connect(actionExport_as_image, SIGNAL(triggered()), viewModel, SLOT(exportAsImageTriggered()));
