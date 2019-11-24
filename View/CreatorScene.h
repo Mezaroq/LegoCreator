@@ -34,11 +34,13 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
+    virtual void keyPressEvent(QKeyEvent *event) override;
 
 signals:
     void focusObjectMoved(QPointF newPosition);
     void focusObjectChanged(CreatorObject* newFocusObject);
     void pointerPositionChanged(bool isSet,bool positionChanged, QPointF position);
+    void removeObjectTriggered();
 };
 
 #endif // CGRAPHICSSCENE_H
