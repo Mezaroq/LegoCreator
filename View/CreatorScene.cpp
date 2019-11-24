@@ -53,3 +53,14 @@ void CreatorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         objectIsMoving = false;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
+
+void CreatorScene::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Delete:
+        emit removeObjectTriggered();
+        break;
+    default:
+        break;
+    }
+}
